@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
 
-class RecordsScreen extends StatefulWidget {
+class BudgetScreen extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _RecordsScreenState();
+  State<StatefulWidget> createState() => _BudgetScreenState();
 }
 
-class _RecordsScreenState extends State<RecordsScreen> {
+class _BudgetScreenState extends State<BudgetScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -56,55 +56,32 @@ class _RecordsScreenState extends State<RecordsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Flexible(
-                      flex: 2,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Iconsax.arrow_circle_left_copy,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurfaceVariant,
-                              size: 20,
-                            ),
-                          ),
-
-                          Text(
-                            "March, 2026",
-                            style: TextStyle(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurfaceVariant,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Iconsax.arrow_circle_right_copy,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurfaceVariant,
-                              size: 20,
-                            ),
-                          ),
-                        ],
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Iconsax.arrow_circle_left_copy,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        size: 20,
                       ),
                     ),
-                    Flexible(
-                      flex: 0,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Iconsax.sort_copy),
+
+                    Text(
+                      "March, 2026",
+                      style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Iconsax.arrow_circle_right_copy,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        size: 20,
                       ),
                     ),
                   ],
@@ -116,17 +93,13 @@ class _RecordsScreenState extends State<RecordsScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _summaryItem(
-                      AppConstants.expense,
+                      AppConstants.totalBudget,
                       "₹5,738.00",
-                      Theme.of(context).colorScheme.error,
+                      Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
+
                     _summaryItem(
-                      AppConstants.income,
-                      "₹500.00",
-                      Theme.of(context).colorScheme.onInverseSurface,
-                    ),
-                    _summaryItem(
-                      AppConstants.total,
+                      AppConstants.totalSpent,
                       "-₹5,238.00",
                       Theme.of(context).colorScheme.error,
                     ),
@@ -136,7 +109,6 @@ class _RecordsScreenState extends State<RecordsScreen> {
             ),
           ),
         ),
-        SliverToBoxAdapter(child: SizedBox(height: 10)),
         SliverFillRemaining(child: _list()),
       ],
     );
@@ -168,6 +140,21 @@ class _RecordsScreenState extends State<RecordsScreen> {
     );
   }
 
+  Widget _list() {
+    return ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: 1,
+      itemBuilder: (context, index) {
+        return Container(
+          margin: EdgeInsets.all(10),
+          color: Colors.amber,
+          child: _recordList(),
+        );
+      },
+    );
+  }
+
   Widget _recordList() {
     return ListView.builder(
       physics: NeverScrollableScrollPhysics(),
@@ -178,21 +165,6 @@ class _RecordsScreenState extends State<RecordsScreen> {
           color: Colors.blueAccent,
           height: 20,
           margin: EdgeInsets.all(10),
-        );
-      },
-    );
-  }
-
-  Widget _list() {
-    return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: 3,
-      itemBuilder: (context, index) {
-        return Container(
-          margin: EdgeInsets.all(10),
-          color: Colors.amber,
-          child: _recordList(),
         );
       },
     );

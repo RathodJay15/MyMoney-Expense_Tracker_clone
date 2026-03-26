@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
 
-class RecordsScreen extends StatefulWidget {
+class AnalysisScreen extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _RecordsScreenState();
+  State<StatefulWidget> createState() => _AnalysisScreenState();
 }
 
-class _RecordsScreenState extends State<RecordsScreen> {
+class _AnalysisScreenState extends State<AnalysisScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -136,7 +136,6 @@ class _RecordsScreenState extends State<RecordsScreen> {
             ),
           ),
         ),
-        SliverToBoxAdapter(child: SizedBox(height: 10)),
         SliverFillRemaining(child: _list()),
       ],
     );
@@ -168,6 +167,21 @@ class _RecordsScreenState extends State<RecordsScreen> {
     );
   }
 
+  Widget _list() {
+    return ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: 1,
+      itemBuilder: (context, index) {
+        return Container(
+          margin: EdgeInsets.all(10),
+          color: Colors.amber,
+          child: _recordList(),
+        );
+      },
+    );
+  }
+
   Widget _recordList() {
     return ListView.builder(
       physics: NeverScrollableScrollPhysics(),
@@ -178,21 +192,6 @@ class _RecordsScreenState extends State<RecordsScreen> {
           color: Colors.blueAccent,
           height: 20,
           margin: EdgeInsets.all(10),
-        );
-      },
-    );
-  }
-
-  Widget _list() {
-    return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: 3,
-      itemBuilder: (context, index) {
-        return Container(
-          margin: EdgeInsets.all(10),
-          color: Colors.amber,
-          child: _recordList(),
         );
       },
     );

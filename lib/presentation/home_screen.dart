@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:mymoneyclone/presentation/accounts_screen.dart';
+import 'package:mymoneyclone/presentation/analysis_screen.dart';
+import 'package:mymoneyclone/presentation/budget_screen.dart';
+import 'package:mymoneyclone/presentation/categories_screen.dart';
 import 'package:mymoneyclone/presentation/records_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,31 +31,31 @@ class _HomeScreenState extends State<HomeScreen> {
           index: _selectedIndex,
           children: [
             RecordsScreen(),
-            Center(child: Text("fasdfsdfaf")),
-            Center(child: Text("fasdfsdfaf")),
-            Center(child: Text("fasdfsdfaf")),
-            Center(child: Text("fasdfsdfaf")),
+            AnalysisScreen(),
+            BudgetScreen(),
+            AccountsScreen(),
+            CategoriesScreen(),
           ],
         ),
-        floatingActionButton: InkWell(
-          onTap: () {},
-          child: Container(
-            height: 60,
-            width: 60,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onPrimary,
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color.fromARGB(47, 0, 0, 0),
-                  blurRadius: 5,
-                  spreadRadius: 3,
-                  offset: Offset(0, 10),
-                ),
-              ],
-            ),
-            child: Icon(
-              Iconsax.add_circle,
+        floatingActionButton: Container(
+          height: 60,
+          width: 60,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.onPrimary,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: const Color.fromARGB(47, 0, 0, 0),
+                blurRadius: 5,
+                spreadRadius: 3,
+                offset: Offset(0, 10),
+              ),
+            ],
+          ),
+          child: IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Iconsax.add_circle_copy,
               color: Theme.of(context).colorScheme.primary,
               size: 35,
             ),
@@ -65,25 +69,41 @@ class _HomeScreenState extends State<HomeScreen> {
           unselectedItemColor: Theme.of(context).colorScheme.onSurfaceVariant,
           selectedIconTheme: IconThemeData(size: 30),
           onTap: (index) => setState(() => _selectedIndex = index),
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Iconsax.receipt),
+              icon: Icon(
+                _selectedIndex == 0
+                    ? Iconsax.receipt_2_1
+                    : Iconsax.receipt_2_1_copy,
+              ),
               label: AppConstants.records,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Iconsax.chart_1),
+              icon: Icon(
+                _selectedIndex == 1 ? Iconsax.chart_3 : Iconsax.chart_1_copy,
+              ),
               label: AppConstants.analysis,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Iconsax.wallet_1),
+              icon: Icon(
+                _selectedIndex == 2
+                    ? Iconsax.calculator
+                    : Iconsax.calculator_copy,
+              ),
               label: AppConstants.budgets,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Iconsax.bank),
+              icon: Icon(
+                _selectedIndex == 3 ? Iconsax.wallet : Iconsax.wallet_1_copy,
+              ),
               label: AppConstants.accounts,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Iconsax.category_2),
+              icon: Icon(
+                _selectedIndex == 4
+                    ? Iconsax.category_2
+                    : Iconsax.category_2_copy,
+              ),
               label: AppConstants.categories,
             ),
           ],
