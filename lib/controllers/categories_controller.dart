@@ -62,9 +62,7 @@ class CategoryController extends GetxController {
   // ================= UPDATE =================
 
   Future<void> updateCategory(CategoryModel category) async {
-    print("----------------catName ${category.name}");
-    int num = await _service.update(category);
-    print("-------------updated cat index $num");
+    await _service.update(category);
     await fetchCategories();
   }
 

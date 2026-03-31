@@ -18,7 +18,11 @@ class CategoriesService {
   Future<List<CategoryModel>> getAll() async {
     final database = await db.database;
 
-    final result = await database.query(AppConstants.categoryTable);
+    final result = await database.query(
+      AppConstants.categoryTable,
+      orderBy:
+          'ignore ASC, name COLLATE NOCASE ASC', // Order by ignore ASC (0s then 1s), then by name ASC (A-Z)
+    );
 
     return result.map((e) => CategoryModel.fromMap(e)).toList();
   }
@@ -34,7 +38,6 @@ class CategoriesService {
   }
 
   Future<int> update(CategoryModel category) async {
-    print("----------------------Update service called");
     final database = await db.database;
 
     return await database.update(

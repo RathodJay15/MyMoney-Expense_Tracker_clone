@@ -31,7 +31,6 @@ class IconHelper {
         return Iconsax.receipt_item;
       case "car":
         return Iconsax.car;
-
       case "shop":
         return Iconsax.shop;
       case "teacher":
@@ -93,5 +92,34 @@ class IconHelper {
     "receipt_edit",
     "call",
     "bus",
+  ];
+
+  List<Map<String, dynamic>> iconData = [
+    {"icon": "award", "color": Colors.amber},
+    {"icon": "ticket_discount", "color": Colors.orange},
+    {"icon": "gift", "color": Colors.red},
+    {"icon": "ticket_star", "color": Colors.purple},
+    {"icon": "money_recive", "color": Colors.green},
+    {"icon": "home_2", "color": Colors.blue},
+    {"icon": "wallet_3", "color": Colors.teal},
+    {"icon": "tag", "color": Colors.pink},
+    {"icon": "happyemoji", "color": Colors.yellow},
+    {"icon": "brush_2", "color": Colors.cyan},
+    {"icon": "receipt_item", "color": Colors.brown},
+    {"icon": "car", "color": Colors.indigo},
+    {"icon": "shop", "color": Colors.deepOrange},
+    {"icon": "teacher", "color": Colors.lightBlue},
+    {"icon": "device_message", "color": Colors.lime},
+    {"icon": "video_play", "color": Colors.redAccent},
+    {"icon": "milk", "color": Colors.blueGrey},
+    {"icon": "heart", "color": Colors.pinkAccent},
+    {"icon": "home", "color": Colors.blue},
+    {"icon": "security_safe", "color": Colors.greenAccent},
+    {"icon": "shopping_cart", "color": Colors.deepPurple},
+    {"icon": "people", "color": Colors.blueAccent},
+    {"icon": "cup", "color": Colors.brown},
+    {"icon": "receipt_edit", "color": Colors.orangeAccent},
+    {"icon": "call", "color": Colors.green},
+    {"icon": "bus", "color": Colors.red},
   ];
 }

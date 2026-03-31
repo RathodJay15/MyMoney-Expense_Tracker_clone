@@ -3,16 +3,24 @@ class CategoryModel {
   final String type;
   final String name;
   final String icon;
+  final int ignore;
 
   CategoryModel({
     this.categoryId,
     required this.type,
     required this.name,
     required this.icon,
+    required this.ignore,
   });
 
   Map<String, dynamic> toMap() {
-    return {'categoryId': categoryId, 'type': type, 'name': name, 'icon': icon};
+    return {
+      'categoryId': categoryId,
+      'type': type,
+      'name': name,
+      'icon': icon,
+      'ignore': ignore,
+    };
   }
 
   factory CategoryModel.fromMap(Map<String, dynamic> map) {
@@ -21,6 +29,7 @@ class CategoryModel {
       type: map['type'],
       name: map['name'],
       icon: map['icon'],
+      ignore: map['ignore'],
     );
   }
 
