@@ -19,6 +19,21 @@ class AppConstants {
   static const totalBudget = "TOTAL BUDGET";
   static const expenseSoFar = "EXPENSE SO FAR";
   static const incomeSoFar = "INCOME SO FAR";
+  static const type = "Type";
+  static const name = "Name";
+  static const icon = "Icon";
+  static const save = "Save";
+  static const cancel = "Cancel";
+  static const incon = "Icon";
+  static const edit = "Edit";
+  static const delete = "Delete";
+
+  //Category screen
+  static const addNewCat = "ADD NEW CATEGORY";
+  static const untitled = "Untitled";
+  static const incomeCat = "Income categories";
+  static const expenseCat = "Expense categories";
+  static const editCat = "EDIT CATEGORY";
 
   static String allAccounts(double amount) {
     return '[ All Accounts $currancy${amount.toStringAsFixed(2)} ]';

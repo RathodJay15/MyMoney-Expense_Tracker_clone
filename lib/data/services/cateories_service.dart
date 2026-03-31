@@ -2,13 +2,17 @@ import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:mymoneyclone/data/database/db_helper.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
 
-class CateoriesService {
+class CategoriesService {
   final db = DatabaseHelper.obj;
 
   Future<int> insert(CategoryModel category) async {
     final database = await db.database;
 
-    return await database.insert(AppConstants.categoryTable, category.toMap());
+    final index = await database.insert(
+      AppConstants.categoryTable,
+      category.toMap(),
+    );
+    return index;
   }
 
   Future<List<CategoryModel>> getAll() async {
@@ -30,6 +34,7 @@ class CateoriesService {
   }
 
   Future<int> update(CategoryModel category) async {
+    print("----------------------Update service called");
     final database = await db.database;
 
     return await database.update(

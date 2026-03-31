@@ -16,4 +16,7 @@ class AppColors {
   static const Color darkAccentGold = Color.fromARGB(255, 247, 200, 61);
   static const Color darkIncome = Color(0xFF96C93D);
   static const Color darkExpense = Color(0xFFFF7247);
+
+  // -------common----------
+  static const Color blueBG = Color.fromARGB(255, 68, 138, 255);
 }

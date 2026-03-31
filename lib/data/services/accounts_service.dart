@@ -2,7 +2,7 @@ import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:mymoneyclone/data/database/db_helper.dart';
 import 'package:mymoneyclone/data/models/accounts_model.dart';
 
-class CateoriesService {
+class AccountsService {
   final db = DatabaseHelper.obj;
 
   Future<int> insert(AccountModel account) async {

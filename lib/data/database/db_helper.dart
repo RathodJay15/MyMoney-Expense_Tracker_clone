@@ -10,12 +10,12 @@ class DatabaseHelper {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB(AppConstants.dbName);
+    _database = await initDB();
     return _database!;
   }
 
-  Future<Database> _initDB(String filePath) async {
-    final path = join(await getDatabasesPath(), filePath);
+  Future<Database> initDB() async {
+    final path = join(await getDatabasesPath(), AppConstants.dbName);
 
     return await openDatabase(
       path,
@@ -54,9 +54,43 @@ class DatabaseHelper {
       note TEXT,
       amount REAL,
       date TEXT,
-      time TEXT,
+      time TEXT
     )
     ''');
+
+    await db.execute('''
+    INSERT INTO categories (name, type, icon) VALUES
+      ('Awards', 'INCOME', 'award'),
+      ('Coupons', 'INCOME', 'ticket_discount'),
+      ('Grants', 'INCOME', 'gift'),
+      ('Lottery', 'INCOME', 'ticket_star'),
+      ('Refunds', 'INCOME', 'money_recive'),
+      ('Rental', 'INCOME', 'home_2'),
+      ('Salary', 'INCOME', 'wallet_3'),
+      ('Sale', 'INCOME', 'tag');
+  ''');
+
+    await db.execute('''
+    INSERT INTO categories (name, type, icon) VALUES
+      ('Baby', 'EXPENSE', 'happyemoji'),
+      ('Beauty', 'EXPENSE', 'brush_2'),
+      ('Bills', 'EXPENSE', 'receipt_item'),
+      ('Car', 'EXPENSE', 'car'),
+      ('Clothing', 'EXPENSE', 'shop'),
+      ('Education', 'EXPENSE', 'teacher'),
+      ('Electronics', 'EXPENSE', 'device_message'),
+      ('Entertainment', 'EXPENSE', 'video_play'),
+      ('Food', 'EXPENSE', 'milk'),
+      ('Health', 'EXPENSE', 'heart'),
+      ('Home', 'EXPENSE', 'home'),
+      ('Insurance', 'EXPENSE', 'security_safe'),
+      ('Shopping', 'EXPENSE', 'shopping_cart'),
+      ('Social', 'EXPENSE', 'people'),
+      ('Sport', 'EXPENSE', 'cup'),
+      ('Tax', 'EXPENSE', 'receipt_edit'),
+      ('Telephone', 'EXPENSE', 'call'),
+      ('Transportation', 'EXPENSE', 'bus');
+  ''');
   }
 }
     // await db.execute('''
