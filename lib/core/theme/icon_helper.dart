@@ -65,7 +65,7 @@ class IconHelper {
     }
   }
 
-  static List<String> icons = [
+  static List<String> catIcons = [
     "award",
     "ticket_discount",
     "gift",

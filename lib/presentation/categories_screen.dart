@@ -1,4 +1,3 @@
-import 'package:flex_menu_button/flex_menu_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
@@ -6,7 +5,6 @@ import 'package:mymoneyclone/controllers/categories_controller.dart';
 import 'package:mymoneyclone/core/constants/app_colors.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:mymoneyclone/core/theme/icon_helper.dart';
-import 'package:mymoneyclone/data/database/db_helper.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
 import 'package:mymoneyclone/presentation/widgets/mymoney_alertdialog.dart';
 
@@ -23,15 +21,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   @override
   void initState() {
     super.initState();
-    checkCat();
-  }
-
-  void checkCat() async {
-    final db = await DatabaseHelper.obj.database;
-
-    final result = await db.rawQuery('SELECT * FROM categories');
-
-    print(result);
   }
 
   @override
@@ -43,6 +32,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: ListView(
+          shrinkWrap: true,
           padding: EdgeInsets.only(bottom: 20),
           children: [
             categoryTypeLabel(AppConstants.incomeCat),
@@ -83,7 +73,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               height: 40,
               width: 40,
               decoration: BoxDecoration(
-                color: category.ignore == 0
+                color: !category.isIgnored
                     ? AppColors.blueBG
                     : AppColors.blueBG.withAlpha(90),
                 borderRadius: BorderRadius.circular(25),
@@ -91,7 +81,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               child: Icon(
                 IconHelper.getIconsaxIcon(category.icon),
                 size: 30,
-                color: category.ignore == 0
+                color: !category.isIgnored
                     ? AppColors.whitIcon
                     : AppColors.whitIcon.withAlpha(90),
               ),
@@ -101,14 +91,14 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               child: Text(
                 category.name,
                 style: TextStyle(
-                  color: category.ignore == 0
+                  color: !category.isIgnored
                       ? Theme.of(context).colorScheme.onSurfaceVariant
                       : Theme.of(
                           context,
                         ).colorScheme.onSurfaceVariant.withAlpha(90),
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  decoration: category.ignore == 0
+                  decoration: !category.isIgnored
                       ? null
                       : TextDecoration.lineThrough,
                   decorationColor: Theme.of(
@@ -118,7 +108,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               ),
             ),
             PopupMenuButton(
-              tooltip: 'Options',
+              tooltip: AppConstants.options,
               icon: Icon(
                 Iconsax.more_copy,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -157,10 +147,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     final response = await MymoneyAlertdialog.showMyDialog(
                       context: context,
                       title: AppConstants.deleteThisCat,
-                      content: AppConstants.deletingMsg,
+                      content: AppConstants.deletingCatMsg,
                     );
                     if (response == true) {
-                      await catController.deleteCategory(category.categoryId!);
+                      await catController.deleteCategory(category);
                     }
                   },
                   child: Text(
@@ -173,37 +163,23 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 ),
                 PopupMenuItem(
                   onTap: () async {
-                    if (category.ignore == 0) {
+                    if (!category.isIgnored) {
                       final response = await MymoneyAlertdialog.showMyDialog(
                         context: context,
                         title: AppConstants.ingnoreThisCat,
-                        content: AppConstants.ignoreMsg,
+                        content: AppConstants.ignoreCatMsg,
                       );
                       if (response == true) {
-                        await catController.updateCategory(
-                          CategoryModel(
-                            categoryId: category.categoryId,
-                            type: category.type,
-                            name: category.name,
-                            icon: category.icon,
-                            ignore: 1,
-                          ),
-                        );
+                        category.isIgnored = true;
+                        await catController.updateCategory(category);
                       }
                     } else {
-                      await catController.updateCategory(
-                        CategoryModel(
-                          categoryId: category.categoryId,
-                          type: category.type,
-                          name: category.name,
-                          icon: category.icon,
-                          ignore: 0,
-                        ),
-                      );
+                      category.isIgnored = false;
+                      await catController.updateCategory(category);
                     }
                   },
                   child: Text(
-                    category.ignore == 0
+                    !category.isIgnored
                         ? AppConstants.ignore
                         : AppConstants.restore,
                     style: TextStyle(
@@ -350,7 +326,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   height: 50,
@@ -359,7 +335,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     color: Colors.blueAccent,
                     borderRadius: BorderRadius.circular(25),
                   ),
-                  child: Icon(Iconsax.home_2, size: 30),
+                  child: Icon(
+                    IconHelper.getIconsaxIcon(category.icon),
+                    size: 30,
+                  ),
                 ),
                 SizedBox(width: 10),
                 Expanded(
@@ -482,7 +461,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
     );
 
     selectedIcon = widget.category != null
-        ? IconHelper.icons.indexOf(widget.category!.icon)
+        ? IconHelper.catIcons.indexOf(widget.category!.icon)
         : 0;
     focusNode.requestFocus();
     super.initState();
@@ -606,6 +585,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                   SizedBox(width: 5),
                   SizedBox(
                     width: 265,
+                    height: 50,
                     child: TextField(
                       controller: nameController,
                       focusNode: focusNode,
@@ -613,8 +593,18 @@ class _CategoryDialogState extends State<CategoryDialog> {
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                       decoration: InputDecoration(
+                        isDense: true,
                         filled: true,
                         fillColor: Theme.of(context).colorScheme.onPrimary,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            width: 2,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
@@ -661,7 +651,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                 child: GridView.builder(
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
-                  itemCount: IconHelper.icons.length,
+                  itemCount: IconHelper.catIcons.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
@@ -684,7 +674,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                               : null,
                         ),
                         child: Icon(
-                          IconHelper.getIconsaxIcon(IconHelper.icons[index]),
+                          IconHelper.getIconsaxIcon(IconHelper.catIcons[index]),
                           color: Colors.white,
                           size: 25,
                         ),
@@ -731,20 +721,17 @@ class _CategoryDialogState extends State<CategoryDialog> {
                           CategoryModel(
                             type: type,
                             name: nameController.text.trim(),
-                            icon: IconHelper.icons[selectedIcon],
-                            ignore: 0,
+                            icon: IconHelper.catIcons[selectedIcon],
+                            isIgnored: false,
                           ),
                         );
                       } else {
-                        await controller.updateCategory(
-                          CategoryModel(
-                            categoryId: widget.category!.categoryId,
-                            type: widget.category!.type,
-                            name: nameController.text.trim(),
-                            icon: IconHelper.icons[selectedIcon],
-                            ignore: 0,
-                          ),
-                        );
+                        final cat = widget.category!;
+                        cat.categoryId = widget.category!.categoryId;
+                        cat.type = widget.category!.type;
+                        cat.name = nameController.text.trim();
+                        cat.icon = IconHelper.catIcons[selectedIcon];
+                        await controller.updateCategory(cat);
                       }
                       Get.back();
                     },

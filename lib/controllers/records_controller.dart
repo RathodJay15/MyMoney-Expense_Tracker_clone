@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:mymoneyclone/data/models/records_model.dart';
-import 'package:mymoneyclone/data/services/records_service.dart';
+import 'package:mymoneyclone/data/services/records_hive_service.dart';
 
 class RecordsController extends GetxController {
-  final RecordsService _service = RecordsService();
+  final RecordsHiveService _service = RecordsHiveService();
 
   // ================= STATE =================
 
@@ -79,7 +79,7 @@ class RecordsController extends GetxController {
   // ================= INSERT =================
 
   Future<void> addRecord(RecordModel record) async {
-    await _service.insert(record);
+    await _service.add(record);
     await fetchRecords(); // refresh
   }
 
@@ -92,8 +92,8 @@ class RecordsController extends GetxController {
 
   // ================= DELETE =================
 
-  Future<void> deleteRecord(int id) async {
-    await _service.delete(id);
+  Future<void> deleteRecord(RecordModel record) async {
+    await _service.delete(record);
     await fetchRecords();
   }
 }

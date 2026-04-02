@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
-import 'package:mymoneyclone/data/services/cateories_service.dart';
+import 'package:mymoneyclone/data/services/cateories_hive_service.dart';
 import '../../data/models/category_model.dart';
 
 class CategoryController extends GetxController {
-  final CategoriesService _service = CategoriesService();
+  final CateoriesHiveService _service = CateoriesHiveService();
 
   // ================= STATE =================
 
@@ -55,7 +55,7 @@ class CategoryController extends GetxController {
   // ================= ADD =================
 
   Future<void> addCategory(CategoryModel category) async {
-    await _service.insert(category);
+    await _service.add(category);
     await fetchCategories();
   }
 
@@ -68,8 +68,8 @@ class CategoryController extends GetxController {
 
   // ================= DELETE =================
 
-  Future<void> deleteCategory(int id) async {
-    await _service.delete(id);
+  Future<void> deleteCategory(CategoryModel category) async {
+    await _service.delete(category);
     await fetchCategories();
   }
 }
