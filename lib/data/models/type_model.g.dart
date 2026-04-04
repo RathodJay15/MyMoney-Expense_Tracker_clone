@@ -17,7 +17,7 @@ class TypeModelAdapter extends TypeAdapter<TypeModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return TypeModel(
-      typeId: fields[0] as int,
+      typeId: fields[0] as int?,
       name: fields[1] as String,
     );
   }

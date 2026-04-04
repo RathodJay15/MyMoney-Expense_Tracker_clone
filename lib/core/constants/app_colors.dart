@@ -20,4 +20,5 @@ class AppColors {
   // -------common----------
   static const Color blueBG = Color.fromARGB(255, 68, 138, 255);
   static const Color whitIcon = Color.fromARGB(255, 255, 255, 255);
+  static const Color black = Color.fromARGB(118, 0, 0, 0);
 }

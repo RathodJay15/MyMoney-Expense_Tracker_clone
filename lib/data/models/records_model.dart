@@ -11,21 +11,24 @@ class RecordModel extends HiveObject {
   final String type;
 
   @HiveField(2)
-  final int account;
+  final String account;
 
   @HiveField(3)
-  final int category;
+  final String? category;
 
   @HiveField(4)
-  final String? note;
+  final String? transferAccount;
 
   @HiveField(5)
-  final double amount;
+  final String? note;
 
   @HiveField(6)
-  final String date;
+  final double amount;
 
   @HiveField(7)
+  final String date;
+
+  @HiveField(8)
   final String time;
 
   RecordModel({
@@ -33,6 +36,7 @@ class RecordModel extends HiveObject {
     required this.type,
     required this.account,
     required this.category,
+    required this.transferAccount,
     this.note,
     required this.amount,
     required this.date,

@@ -1,14 +1,19 @@
 import 'package:get/get.dart';
 import 'package:mymoneyclone/data/models/records_model.dart';
+import 'package:mymoneyclone/data/models/type_model.dart';
 import 'package:mymoneyclone/data/services/records_hive_service.dart';
+import 'package:mymoneyclone/data/services/type_hive_service.dart';
 
 class RecordsController extends GetxController {
   final RecordsHiveService _service = RecordsHiveService();
+  final TypeHiveService _tServise = TypeHiveService();
 
   // ================= STATE =================
 
   var records = <RecordModel>[].obs;
   var groupedRecords = <String, List<RecordModel>>{}.obs;
+
+  var types = <TypeModel>[].obs;
 
   var totalIncome = 0.0.obs;
   var totalExpense = 0.0.obs;
@@ -40,6 +45,10 @@ class RecordsController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> fetchTypes() async {
+    types.value = _tServise.getAll();
   }
 
   // ================= GROUPING =================

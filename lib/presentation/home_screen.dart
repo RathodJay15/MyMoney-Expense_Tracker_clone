@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:mymoneyclone/presentation/accounts_screen.dart';
+import 'package:mymoneyclone/presentation/add_record_screen.dart';
 import 'package:mymoneyclone/presentation/analysis_screen.dart';
 import 'package:mymoneyclone/presentation/budget_screen.dart';
 import 'package:mymoneyclone/presentation/categories_screen.dart';
@@ -17,66 +19,25 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
 
-  late ScrollController _scrollController;
-  late AnimationController _fabAnimationController;
-
-  bool _isFabVisible = true;
-
-  void _onScroll() {
-    if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      if (_isFabVisible) {
-        setState(() {
-          _isFabVisible = false;
-        });
-      }
-    } else if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.forward) {
-      if (!_isFabVisible) {
-        setState(() {
-          _isFabVisible = true;
-        });
-      }
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _scrollController = ScrollController();
-
-    _fabAnimationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 250),
-    );
-
-    _scrollController.addListener(_onScroll);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    _fabAnimationController.dispose();
-    super.dispose();
+  void _addNewRecord() {
+    Get.to(AddRecordScreen());
   }
 
   @override
   Widget build(BuildContext) {
-    return SafeArea(
-      child: Scaffold(
-        body: Scaffold(
-          drawer: Drawer(
-            child: ListView(
-              children: [
-                DrawerHeader(child: Text('Menu')),
-                ListTile(title: Text('Home')),
-              ],
-            ),
+    return Scaffold(
+      body: Scaffold(
+        drawer: Drawer(
+          child: ListView(
+            children: [
+              DrawerHeader(child: Text('Menu')),
+              ListTile(title: Text('Home')),
+            ],
           ),
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          body: CustomScrollView(
-            controller: _scrollController,
+        ),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        body: SafeArea(
+          child: CustomScrollView(
             slivers: [
               SliverAppBar(
                 toolbarHeight: 40,
@@ -132,82 +93,82 @@ class _HomeScreenState extends State<HomeScreen>
               ),
             ],
           ),
-          floatingActionButton: Container(
-            height: 60,
-            width: 60,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onPrimary,
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color.fromARGB(47, 0, 0, 0),
-                  blurRadius: 5,
-                  spreadRadius: 3,
-                  offset: Offset(0, 10),
-                ),
-              ],
-            ),
-            child: IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Iconsax.add_circle_copy,
-                color: Theme.of(context).colorScheme.primary,
-                size: 35,
-              ),
-            ),
-          ),
         ),
-        bottomNavigationBar: Theme(
-          data: Theme.of(
-            context,
-          ).copyWith(canvasColor: Theme.of(context).colorScheme.onPrimary),
-          child: BottomNavigationBar(
-            currentIndex: _selectedIndex,
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: Theme.of(context).colorScheme.primary,
-            unselectedItemColor: Theme.of(context).colorScheme.onSurfaceVariant,
-            selectedIconTheme: IconThemeData(size: 30),
-            // selectedFontSize: 12,
-            onTap: (index) => setState(() => _selectedIndex = index),
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(
-                  _selectedIndex == 0
-                      ? Iconsax.receipt_2_1
-                      : Iconsax.receipt_2_1_copy,
-                ),
-                label: AppConstants.records,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  _selectedIndex == 1 ? Iconsax.chart_3 : Iconsax.chart_1_copy,
-                ),
-                label: AppConstants.analysis,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  _selectedIndex == 2
-                      ? Iconsax.calculator
-                      : Iconsax.calculator_copy,
-                ),
-                label: AppConstants.budgets,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  _selectedIndex == 3 ? Iconsax.wallet : Iconsax.wallet_1_copy,
-                ),
-                label: AppConstants.accounts,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  _selectedIndex == 4
-                      ? Iconsax.category_2
-                      : Iconsax.category_2_copy,
-                ),
-                label: AppConstants.categories,
+        floatingActionButton: Container(
+          height: 60,
+          width: 60,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.onPrimary,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: const Color.fromARGB(47, 0, 0, 0),
+                blurRadius: 5,
+                spreadRadius: 3,
+                offset: Offset(0, 10),
               ),
             ],
           ),
+          child: IconButton(
+            onPressed: _addNewRecord,
+            icon: Icon(
+              Iconsax.add_circle_copy,
+              color: Theme.of(context).colorScheme.primary,
+              size: 35,
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: Theme(
+        data: Theme.of(
+          context,
+        ).copyWith(canvasColor: Theme.of(context).colorScheme.onPrimary),
+        child: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Theme.of(context).colorScheme.primary,
+          unselectedItemColor: Theme.of(context).colorScheme.onSurfaceVariant,
+          selectedIconTheme: IconThemeData(size: 30),
+          // selectedFontSize: 12,
+          onTap: (index) => setState(() => _selectedIndex = index),
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(
+                _selectedIndex == 0
+                    ? Iconsax.receipt_2_1
+                    : Iconsax.receipt_2_1_copy,
+              ),
+              label: AppConstants.records,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                _selectedIndex == 1 ? Iconsax.chart_3 : Iconsax.chart_1_copy,
+              ),
+              label: AppConstants.analysis,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                _selectedIndex == 2
+                    ? Iconsax.calculator
+                    : Iconsax.calculator_copy,
+              ),
+              label: AppConstants.budgets,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                _selectedIndex == 3 ? Iconsax.wallet : Iconsax.wallet_1_copy,
+              ),
+              label: AppConstants.accounts,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                _selectedIndex == 4
+                    ? Iconsax.category_2
+                    : Iconsax.category_2_copy,
+              ),
+              label: AppConstants.categories,
+            ),
+          ],
         ),
       ),
     );

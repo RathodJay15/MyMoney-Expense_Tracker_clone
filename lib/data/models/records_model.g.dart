@@ -19,19 +19,20 @@ class RecordModelAdapter extends TypeAdapter<RecordModel> {
     return RecordModel(
       recordId: fields[0] as int?,
       type: fields[1] as String,
-      account: fields[2] as int,
-      category: fields[3] as int,
-      note: fields[4] as String?,
-      amount: fields[5] as double,
-      date: fields[6] as String,
-      time: fields[7] as String,
+      account: fields[2] as String,
+      category: fields[3] as String?,
+      transferAccount: fields[4] as String?,
+      note: fields[5] as String?,
+      amount: fields[6] as double,
+      date: fields[7] as String,
+      time: fields[8] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, RecordModel obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.recordId)
       ..writeByte(1)
@@ -41,12 +42,14 @@ class RecordModelAdapter extends TypeAdapter<RecordModel> {
       ..writeByte(3)
       ..write(obj.category)
       ..writeByte(4)
-      ..write(obj.note)
+      ..write(obj.transferAccount)
       ..writeByte(5)
-      ..write(obj.amount)
+      ..write(obj.note)
       ..writeByte(6)
-      ..write(obj.date)
+      ..write(obj.amount)
       ..writeByte(7)
+      ..write(obj.date)
+      ..writeByte(8)
       ..write(obj.time);
   }
 

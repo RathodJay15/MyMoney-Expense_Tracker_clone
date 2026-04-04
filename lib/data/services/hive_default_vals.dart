@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:mymoneyclone/data/models/type_model.dart';
 import '../models/category_model.dart';
 import '../models/accounts_model.dart';
 import '../../core/constants/app_constants.dart';
@@ -8,6 +9,8 @@ class HiveDefaultVals {
     final categoryBox = Hive.box<CategoryModel>(AppConstants.categoryHiveBox);
 
     final accountBox = Hive.box<AccountModel>(AppConstants.accountHiveBox);
+
+    final typeBox = Hive.box<TypeModel>(AppConstants.typeHiveBox);
 
     if (categoryBox.isEmpty) {
       await categoryBox.addAll([
@@ -196,6 +199,14 @@ class HiveDefaultVals {
           icon: 'tag',
           isIgnored: false,
         ),
+      ]);
+    }
+
+    if (typeBox.isEmpty) {
+      await typeBox.addAll([
+        TypeModel(name: AppConstants.income),
+        TypeModel(name: AppConstants.expense),
+        TypeModel(name: AppConstants.transfer),
       ]);
     }
   }

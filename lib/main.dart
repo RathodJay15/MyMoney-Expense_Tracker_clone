@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:mymoneyclone/core/theme/my_money_theme.dart';
+import 'package:mymoneyclone/data/bindings/mymoney_bindings.dart';
 import 'package:mymoneyclone/data/models/accounts_model.dart';
 import 'package:mymoneyclone/data/models/budget_model.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
@@ -13,6 +15,11 @@ import '/presentation/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   await Hive.initFlutter();
 
@@ -39,6 +46,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      initialBinding: MymoneyBindings(),
       theme: MyMoneyTheme.lightTheme,
       darkTheme: MyMoneyTheme.darkTheme,
       themeMode: ThemeMode.system,

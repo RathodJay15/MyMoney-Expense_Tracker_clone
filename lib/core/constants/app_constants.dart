@@ -21,6 +21,7 @@ class AppConstants {
   //Common
   static const expense = "EXPENSE";
   static const income = "INCOME";
+  static const transfer = "TRANSFER";
   static const total = "TOTAL";
   static const totalSpent = "TOTAL SPENT";
   static const totalBudget = "TOTAL BUDGET";
@@ -29,8 +30,8 @@ class AppConstants {
   static const type = "Type";
   static const name = "Name";
   static const icon = "Icon";
-  static const save = "Save";
-  static const cancel = "Cancel";
+  static const save = "SAVE";
+  static const cancel = "CANCEL";
   static const incon = "Icon";
   static const edit = "Edit";
   static const delete = "Delete";
@@ -40,6 +41,20 @@ class AppConstants {
   static const ignore = "Ignore";
   static const restore = "Restore";
   static const recordsAllTime = "Records: All time";
+  static const account = "Account";
+  static const category = "Category";
+  static const from = "From";
+  static const to = "To";
+
+  //Record screen
+  static const addNotes = "Add notes";
+  static const selectAnAccount = "Select an account";
+  static const selectACategory = "Select a category";
+  static const amountCantBeZero = "Amount can not be zero";
+  static const noAccountSelected = "No account seletced";
+  static const noCategorySelected = "No category seletced";
+  static const transferAccountsAreSame =
+      "Transfer accounts are same, choose different accounts";
 
   //Account screen
   static const addNewAcc = "ADD NEW ACCOUNT";
