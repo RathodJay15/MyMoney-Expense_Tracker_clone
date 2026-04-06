@@ -25,6 +25,10 @@ class AccountsHiveService {
     return [...active, ...ignored];
   }
 
+  AccountModel? getAccById(int id) {
+    return _accountBox.get(id);
+  }
+
   Future<void> delete(AccountModel account) async {
     await account.delete();
   }

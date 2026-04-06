@@ -12,7 +12,7 @@ class AppConstants {
   static const currancy = '₹';
 
   static String amount(double amount) {
-    return "$currancy$amount";
+    return "$currancy${amount.toStringAsFixed(2)}";
   }
 
   //App Bar
@@ -53,8 +53,13 @@ class AppConstants {
   static const amountCantBeZero = "Amount can not be zero";
   static const noAccountSelected = "No account seletced";
   static const noCategorySelected = "No category seletced";
+  static const noNotes = "No notes";
   static const transferAccountsAreSame =
       "Transfer accounts are same, choose different accounts";
+  static const deleteThisRecord = "Delete this record?";
+  static const areYouSure = "Are you sure?";
+  static const emptyStateMsg =
+      "No record in this month. Tap + to add new expense or income.";
 
   //Account screen
   static const addNewAcc = "ADD NEW ACCOUNT";

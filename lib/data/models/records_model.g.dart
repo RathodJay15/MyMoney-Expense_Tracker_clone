@@ -19,12 +19,12 @@ class RecordModelAdapter extends TypeAdapter<RecordModel> {
     return RecordModel(
       recordId: fields[0] as int?,
       type: fields[1] as String,
-      account: fields[2] as String,
-      category: fields[3] as String?,
-      transferAccount: fields[4] as String?,
+      accountId: fields[2] as int,
+      categoryId: fields[3] as int?,
+      transferAccountId: fields[4] as int?,
       note: fields[5] as String?,
       amount: fields[6] as double,
-      date: fields[7] as String,
+      date: fields[7] as DateTime,
       time: fields[8] as String,
     );
   }
@@ -38,11 +38,11 @@ class RecordModelAdapter extends TypeAdapter<RecordModel> {
       ..writeByte(1)
       ..write(obj.type)
       ..writeByte(2)
-      ..write(obj.account)
+      ..write(obj.accountId)
       ..writeByte(3)
-      ..write(obj.category)
+      ..write(obj.categoryId)
       ..writeByte(4)
-      ..write(obj.transferAccount)
+      ..write(obj.transferAccountId)
       ..writeByte(5)
       ..write(obj.note)
       ..writeByte(6)

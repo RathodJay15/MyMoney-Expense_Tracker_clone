@@ -5,38 +5,38 @@ part 'records_model.g.dart';
 @HiveType(typeId: 3)
 class RecordModel extends HiveObject {
   @HiveField(0)
-  final int? recordId;
+  int? recordId;
 
   @HiveField(1)
-  final String type;
+  String type;
 
   @HiveField(2)
-  final String account;
+  int accountId;
 
   @HiveField(3)
-  final String? category;
+  int? categoryId;
 
   @HiveField(4)
-  final String? transferAccount;
+  int? transferAccountId;
 
   @HiveField(5)
-  final String? note;
+  String? note;
 
   @HiveField(6)
-  final double amount;
+  double amount;
 
   @HiveField(7)
-  final String date;
+  DateTime date;
 
   @HiveField(8)
-  final String time;
+  String time;
 
   RecordModel({
     this.recordId,
     required this.type,
-    required this.account,
-    required this.category,
-    required this.transferAccount,
+    required this.accountId,
+    required this.categoryId,
+    required this.transferAccountId,
     this.note,
     required this.amount,
     required this.date,

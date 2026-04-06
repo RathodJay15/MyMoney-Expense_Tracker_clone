@@ -41,6 +41,12 @@ class _CategoryDialogState extends State<CategoryDialog> {
   }
 
   @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData(),

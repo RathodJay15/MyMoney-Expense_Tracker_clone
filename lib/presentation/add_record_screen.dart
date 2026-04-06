@@ -15,6 +15,9 @@ import 'package:mymoneyclone/presentation/widgets/add_account.dart';
 import 'package:mymoneyclone/presentation/widgets/app_snackbar.dart';
 
 class AddRecordScreen extends StatefulWidget {
+  RecordModel? oldRecord;
+
+  AddRecordScreen({super.key, required this.oldRecord});
   @override
   State<StatefulWidget> createState() => _AddRecordScreenState();
 }
@@ -25,7 +28,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
 
   String selectedType = AppConstants.expense;
   String enteredAmount = "0";
-  String? selectedDate;
+  DateTime? selectedDate;
   String? selectedTime;
   AccountModel? selectedAccount;
   AccountModel? transferAccount;
@@ -40,13 +43,13 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
   void _getDate() async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: AppHelper.getFormattedDateTime(selectedDate!),
+      initialDate: selectedDate,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
     if (picked != null) {
       setState(() {
-        selectedDate = AppHelper.getFormattedDateString(picked);
+        selectedDate = picked;
       });
     }
   }
@@ -88,35 +91,37 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
       }
     }
 
-    if (selectedType == AppConstants.transfer) {
-      recordsController.addRecord(
-        RecordModel(
-          type: selectedType,
-          account: selectedAccount!.name,
-          category: null,
-          transferAccount: transferAccount!.name,
-          amount: double.parse(enteredAmount),
-          date: selectedDate!,
-          time: selectedTime!,
-        ),
-      );
+    final isTransfer = selectedType == AppConstants.transfer;
+    final isUpdate = widget.oldRecord != null;
+
+    if (isUpdate) {
+      final record = widget.oldRecord!;
+
+      record.type = selectedType;
+      record.accountId = selectedAccount!.key;
+      record.categoryId = isTransfer ? null : selectedCategory!.key;
+      record.transferAccountId = isTransfer ? transferAccount!.key : null;
+      record.amount = double.parse(enteredAmount);
+      record.note = noteController.text.trim();
+      record.date = selectedDate!;
+      record.time = selectedTime!;
+
+      record.save(); // ✅ correct update
     } else {
-      recordsController.addRecord(
-        RecordModel(
-          type: selectedType,
-          account: selectedAccount!.name,
-          category: selectedCategory!.name,
-          transferAccount: null,
-          amount: double.parse(enteredAmount),
-          date: selectedDate!,
-          time: selectedTime!,
-        ),
+      final record = RecordModel(
+        type: selectedType,
+        accountId: selectedAccount!.key,
+        categoryId: isTransfer ? null : selectedCategory!.key,
+        transferAccountId: isTransfer ? transferAccount!.key : null,
+        amount: double.parse(enteredAmount),
+        note: noteController.text.trim(),
+        date: selectedDate!,
+        time: selectedTime!,
       );
+
+      recordsController.addRecord(record);
     }
     Get.back();
-    print(
-      "---------------------------------${recordsController.groupedRecords.length}",
-    );
   }
 
   void _getTime(BuildContext context) async {
@@ -141,8 +146,30 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
 
   @override
   void didChangeDependencies() {
-    selectedDate = AppHelper.getFormattedDateString(DateTime.now());
-    selectedTime = AppHelper.getFormattedTimeString(TimeOfDay.now(), context);
+    if (widget.oldRecord == null) {
+      selectedDate = DateTime.now();
+      selectedTime = AppHelper.getFormattedTimeString(TimeOfDay.now(), context);
+    } else {
+      final account = recordsController.getAccById(widget.oldRecord!.accountId);
+      AccountModel? transferAccountOld;
+      CategoryModel? category;
+      if (widget.oldRecord!.type == AppConstants.transfer) {
+        transferAccountOld = recordsController.getAccById(
+          widget.oldRecord!.transferAccountId!,
+        );
+      } else {
+        category = recordsController.getCatById(widget.oldRecord!.categoryId!);
+      }
+
+      selectedDate = widget.oldRecord!.date;
+      selectedTime = widget.oldRecord!.time;
+      selectedType = widget.oldRecord!.type;
+      selectedAccount = account;
+      selectedCategory = category;
+      transferAccount = transferAccountOld;
+      noteController.text = widget.oldRecord!.note ?? "";
+      enteredAmount = widget.oldRecord!.amount.toString();
+    }
     super.didChangeDependencies();
   }
 
@@ -339,7 +366,6 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
                   ),
                 ),
                 SizedBox(
-                  width: 200,
                   height: 50,
                   child: OutlinedButton(
                     onPressed: () {
@@ -368,7 +394,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
                             children: [
                               Icon(
                                 Iconsax.wallet,
-                                size: 35,
+                                size: 30,
                                 color: Theme.of(
                                   context,
                                 ).colorScheme.onSurfaceVariant,
@@ -381,7 +407,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
                                   color: Theme.of(
                                     context,
                                   ).colorScheme.onSurfaceVariant,
-                                  fontSize: 18,
+                                  fontSize: 16,
                                 ),
                               ),
                             ],
@@ -413,7 +439,6 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
                   ),
                 ),
                 SizedBox(
-                  width: 200,
                   height: 50,
                   child: OutlinedButton(
                     onPressed: () {
@@ -455,7 +480,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
                                 selectedType == AppConstants.transfer
                                     ? Iconsax.wallet
                                     : Iconsax.category,
-                                size: 35,
+                                size: 30,
                                 color: Theme.of(
                                   context,
                                 ).colorScheme.onSurfaceVariant,
@@ -470,7 +495,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
                                   color: Theme.of(
                                     context,
                                   ).colorScheme.onSurfaceVariant,
-                                  fontSize: 18,
+                                  fontSize: 16,
                                 ),
                               ),
                             ],
@@ -511,7 +536,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
           account.name,
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
-            fontSize: 18,
+            fontSize: 16,
           ),
         ),
       ],
@@ -524,15 +549,15 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          height: 40,
-          width: 40,
+          height: 35,
+          width: 35,
           decoration: BoxDecoration(
             color: AppColors.blueBG,
             borderRadius: BorderRadius.circular(25),
           ),
           child: Icon(
             IconHelper.getIconsaxIcon(category.icon),
-            size: 30,
+            size: 25,
             color: AppColors.whitIcon,
           ),
         ),
@@ -541,7 +566,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
           category.name,
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
-            fontSize: 18,
+            fontSize: 16,
           ),
         ),
       ],
@@ -828,7 +853,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
                 borderRadius: BorderRadius.circular(5),
                 child: Center(
                   child: Text(
-                    selectedDate ?? "",
+                    AppHelper.getFormattedDateString(selectedDate!),
                     style: TextStyle(
                       fontSize: 20,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -852,7 +877,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
                 borderRadius: BorderRadius.circular(5),
                 child: Center(
                   child: Text(
-                    selectedTime ?? "",
+                    selectedTime!,
                     style: TextStyle(
                       fontSize: 20,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,

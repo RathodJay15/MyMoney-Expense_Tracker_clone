@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen>
   int _selectedIndex = 0;
 
   void _addNewRecord() {
-    Get.to(AddRecordScreen());
+    Get.to(AddRecordScreen(oldRecord: null));
   }
 
   @override

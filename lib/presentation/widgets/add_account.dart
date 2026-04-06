@@ -48,6 +48,13 @@ class _AccountDialogState extends State<AccountDialog> {
   }
 
   @override
+  void dispose() {
+    nameController.dispose();
+    initialAmountController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData(),

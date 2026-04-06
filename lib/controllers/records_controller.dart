@@ -1,12 +1,19 @@
 import 'package:get/get.dart';
+import 'package:mymoneyclone/core/constants/app_helper.dart';
+import 'package:mymoneyclone/data/models/accounts_model.dart';
+import 'package:mymoneyclone/data/models/category_model.dart';
 import 'package:mymoneyclone/data/models/records_model.dart';
 import 'package:mymoneyclone/data/models/type_model.dart';
+import 'package:mymoneyclone/data/services/accounts_hive_service.dart';
+import 'package:mymoneyclone/data/services/categories_hive_service.dart';
 import 'package:mymoneyclone/data/services/records_hive_service.dart';
 import 'package:mymoneyclone/data/services/type_hive_service.dart';
 
 class RecordsController extends GetxController {
   final RecordsHiveService _service = RecordsHiveService();
   final TypeHiveService _tServise = TypeHiveService();
+  final AccountsHiveService _accountsHiveService = AccountsHiveService();
+  final CategoriesHiveService _categoriesHiveService = CategoriesHiveService();
 
   // ================= STATE =================
 
@@ -35,7 +42,7 @@ class RecordsController extends GetxController {
     try {
       isLoading.value = true;
 
-      final data = await _service.getAll();
+      final data = _service.getAll();
       records.value = data;
 
       _groupRecordsByDate();
@@ -57,10 +64,10 @@ class RecordsController extends GetxController {
     Map<String, List<RecordModel>> grouped = {};
 
     for (var record in records) {
-      if (!grouped.containsKey(record.date)) {
-        grouped[record.date] = [];
+      if (!grouped.containsKey(AppHelper.getFormattedDateString(record.date))) {
+        grouped[AppHelper.getFormattedDateString(record.date)] = [];
       }
-      grouped[record.date]!.add(record);
+      grouped[AppHelper.getFormattedDateString(record.date)]!.add(record);
     }
 
     groupedRecords.value = grouped;
@@ -104,5 +111,14 @@ class RecordsController extends GetxController {
   Future<void> deleteRecord(RecordModel record) async {
     await _service.delete(record);
     await fetchRecords();
+  }
+
+  //===========================================
+  CategoryModel? getCatById(int id) {
+    return _categoriesHiveService.getCatById(id);
+  }
+
+  AccountModel? getAccById(int id) {
+    return _accountsHiveService.getAccById(id);
   }
 }

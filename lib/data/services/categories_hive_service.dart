@@ -2,7 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
 
-class CateoriesHiveService {
+class CategoriesHiveService {
   final Box<CategoryModel> _categoryBox = Hive.box<CategoryModel>(
     AppConstants.categoryHiveBox,
   );
@@ -23,6 +23,10 @@ class CateoriesHiveService {
     );
 
     return [...active, ...ignored];
+  }
+
+  CategoryModel? getCatById(int id) {
+    return _categoryBox.get(id);
   }
 
   Future<void> delete(CategoryModel category) async {

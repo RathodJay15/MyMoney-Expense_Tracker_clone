@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
-import 'package:mymoneyclone/data/services/cateories_hive_service.dart';
+import 'package:mymoneyclone/data/services/categories_hive_service.dart';
 import '../../data/models/category_model.dart';
 
 class CategoryController extends GetxController {
-  final CateoriesHiveService _service = CateoriesHiveService();
+  final CategoriesHiveService _service = CategoriesHiveService();
 
   // ================= STATE =================
 
