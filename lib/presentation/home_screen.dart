@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:mymoneyclone/controllers/accounts_controller.dart';
+import 'package:mymoneyclone/controllers/records_controller.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:mymoneyclone/presentation/accounts_screen.dart';
@@ -17,6 +20,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
+  RecordsController recordsController = Get.find();
+  AccountsController accountsController = Get.find();
+
   int _selectedIndex = 0;
 
   void _addNewRecord() {
@@ -184,88 +190,103 @@ class _HomeScreenState extends State<HomeScreen>
       centerTitle: false,
       automaticallyImplyLeading: false,
       iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
-      title: Container(
-        padding: EdgeInsets.fromLTRB(16, 10, 16, 12),
-        width: double.infinity,
-        color: Theme.of(context).colorScheme.onPrimary,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Flexible(
-                  flex: 2,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Iconsax.arrow_circle_left_copy,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          size: 20,
-                        ),
-                      ),
+      title: Obx(() {
+        DateTime date = recordsController.recordAnalysisMonth.value;
+        String formated = DateFormat.yMMMM().format(date);
 
-                      Text(
-                        "March, 2026",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+        return Container(
+          padding: EdgeInsets.fromLTRB(16, 10, 16, 12),
+          width: double.infinity,
+          color: Theme.of(context).colorScheme.onPrimary,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            recordsController.previousMonth();
+                          },
+                          icon: Icon(
+                            Iconsax.arrow_circle_left_copy,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                            size: 20,
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Iconsax.arrow_circle_right_copy,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          size: 20,
+
+                        Text(
+                          formated,
+                          style: TextStyle(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                    ],
+                        IconButton(
+                          onPressed: () {
+                            recordsController.nextMonth();
+                          },
+                          icon: Icon(
+                            Iconsax.arrow_circle_right_copy,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                            size: 20,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Flexible(
-                  flex: 0,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(Iconsax.sort_copy),
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  Flexible(
+                    flex: 0,
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: Icon(Iconsax.sort_copy),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
 
-            SizedBox(height: 15),
+              SizedBox(height: 15),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _recordsAnalysisAppbarItem(
-                  AppConstants.expense,
-                  "₹5,738.00",
-                  Theme.of(context).colorScheme.error,
-                ),
-                _recordsAnalysisAppbarItem(
-                  AppConstants.income,
-                  "₹500.00",
-                  Theme.of(context).colorScheme.onInverseSurface,
-                ),
-                _recordsAnalysisAppbarItem(
-                  AppConstants.total,
-                  "-₹5,238.00",
-                  Theme.of(context).colorScheme.error,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _recordsAnalysisAppbarItem(
+                    AppConstants.expense,
+                    "₹5,738.00",
+                    Theme.of(context).colorScheme.error,
+                  ),
+                  _recordsAnalysisAppbarItem(
+                    AppConstants.income,
+                    "₹500.00",
+                    Theme.of(context).colorScheme.onInverseSurface,
+                  ),
+                  _recordsAnalysisAppbarItem(
+                    AppConstants.total,
+                    "-₹5,238.00",
+                    Theme.of(context).colorScheme.error,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 
@@ -405,43 +426,49 @@ class _HomeScreenState extends State<HomeScreen>
       centerTitle: false,
       automaticallyImplyLeading: false,
       iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
-      title: Container(
-        padding: EdgeInsets.fromLTRB(16, 10, 16, 12),
-        width: double.infinity,
-        color: Theme.of(context).colorScheme.onPrimary,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              AppConstants.allAccounts(10000),
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
+      title: Obx(() {
+        final accountsBalanceTotal =
+            accountsController.accountBalanceTotal.value;
+        final expenseSofar = recordsController.totalExpenseSofar.value;
+        final incomeSofar = recordsController.totalIncomeSofar.value;
+        return Container(
+          padding: EdgeInsets.fromLTRB(16, 10, 16, 12),
+          width: double.infinity,
+          color: Theme.of(context).colorScheme.onPrimary,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                AppConstants.allAccounts(accountsBalanceTotal),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: 30),
+              SizedBox(height: 30),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _accountsCategoryAppBarItem(
-                  AppConstants.expenseSoFar,
-                  "₹5,738.00",
-                  Theme.of(context).colorScheme.error,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _accountsCategoryAppBarItem(
+                    AppConstants.expenseSoFar,
+                    AppConstants.amount(expenseSofar),
+                    Theme.of(context).colorScheme.error,
+                  ),
 
-                _accountsCategoryAppBarItem(
-                  AppConstants.incomeSoFar,
-                  "-₹5,238.00",
-                  Theme.of(context).colorScheme.onInverseSurface,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+                  _accountsCategoryAppBarItem(
+                    AppConstants.incomeSoFar,
+                    AppConstants.amount(incomeSofar),
+                    Theme.of(context).colorScheme.onInverseSurface,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 

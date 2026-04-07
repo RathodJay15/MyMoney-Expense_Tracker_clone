@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mymoneyclone/controllers/accounts_controller.dart';
+import 'package:mymoneyclone/controllers/records_controller.dart';
 import 'package:mymoneyclone/core/constants/app_colors.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:mymoneyclone/core/theme/icon_helper.dart';
@@ -18,6 +19,7 @@ class AccountDialog extends StatefulWidget {
 
 class _AccountDialogState extends State<AccountDialog> {
   AccountsController accController = Get.find();
+  RecordsController recController = Get.find();
 
   // final AccountC controller = Get.find();
   late TextEditingController nameController;
@@ -308,6 +310,7 @@ class _AccountDialogState extends State<AccountDialog> {
                         );
                         acc.isIgnored = false;
                         accController.updateAccounts(acc);
+                        recController.updateAccountBalance(acc.key);
                       }
                       Get.back();
                     },

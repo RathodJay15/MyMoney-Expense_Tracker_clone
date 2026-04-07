@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class AppConstants {
   // static const dbName = 'mymoney.db';
   // static const dbVersion = 1;
@@ -12,7 +14,12 @@ class AppConstants {
   static const currancy = '₹';
 
   static String amount(double amount) {
-    return "$currancy${amount.toStringAsFixed(2)}";
+    final formatter = NumberFormat("#,##,##0.00", "en_IN");
+    return "$currancy${formatter.format(amount)}";
+  }
+
+  static String allAccounts(double val) {
+    return '[ All Accounts ${amount(val)} ]';
   }
 
   //App Bar
@@ -96,10 +103,6 @@ class AppConstants {
       "Unless used, this category will not appear anywhere else. You can restore it at any time. Are you sure?";
   static const analysisDialog =
       "You can see Monthly, weekly, or daily statistics in the Analysis section.";
-
-  static String allAccounts(double amount) {
-    return '[ All Accounts $currancy${amount.toStringAsFixed(2)} ]';
-  }
 
   //NavBar
   static const records = "Records";

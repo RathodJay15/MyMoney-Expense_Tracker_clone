@@ -25,6 +25,7 @@ class AddRecordScreen extends StatefulWidget {
 class _AddRecordScreenState extends State<AddRecordScreen> {
   // RecordsController recordsController = Get.put(RecordsController());
   RecordsController recordsController = Get.find();
+  AccountsController accountsController = Get.find();
 
   String selectedType = AppConstants.expense;
   String enteredAmount = "0";
@@ -54,7 +55,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
     }
   }
 
-  void _addRecord() {
+  void _addRecord() async {
     if (enteredAmount == "0" || enteredAmount.isEmpty) {
       AppSnackbar.showSnackBar(
         context,
@@ -106,7 +107,9 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
       record.date = selectedDate!;
       record.time = selectedTime!;
 
-      record.save(); // ✅ correct update
+      record.save();
+
+      recordsController.updateAccountBalance(selectedAccount!.key);
     } else {
       final record = RecordModel(
         type: selectedType,
@@ -121,7 +124,16 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
 
       recordsController.addRecord(record);
     }
+
+    await recordsController.fetchRecords();
+    if (isTransfer) {
+      recordsController.updateAccountBalance(selectedAccount!.key);
+      recordsController.updateAccountBalance(transferAccount!.key);
+    } else {
+      recordsController.updateAccountBalance(selectedAccount!.key);
+    }
     Get.back();
+    accountsController.fetchAccounts();
   }
 
   void _getTime(BuildContext context) async {
@@ -917,7 +929,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
             ),
           ),
           Obx(() {
-            final accounts = accController.accounts;
+            final accounts = accController.displayAccounts;
             return ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -969,9 +981,9 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
                         trailing: Text(
                           AppConstants.amount(account.balance),
                           style: TextStyle(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onInverseSurface,
+                            color: account.balance >= 0
+                                ? Theme.of(context).colorScheme.onInverseSurface
+                                : Theme.of(context).colorScheme.error,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -1020,6 +1032,10 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
             final categories = selectedType == AppConstants.expense
                 ? catController.expenseCategories
                 : catController.incomeCategories;
+
+            final displayCategories = categories
+                .where((c) => c.isIgnored == false)
+                .toList();
             return SizedBox(
               height: MediaQuery.heightOf(context) * 0.77,
               child: GridView.builder(
@@ -1032,7 +1048,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
                   childAspectRatio: 1.1,
                 ),
                 itemBuilder: (context, index) {
-                  final category = categories[index];
+                  final category = displayCategories[index];
                   return Material(
                     color: Colors.transparent,
                     child: InkWell(
@@ -1081,7 +1097,7 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
                     ),
                   );
                 },
-                itemCount: categories.length,
+                itemCount: displayCategories.length,
               ),
             );
           }),

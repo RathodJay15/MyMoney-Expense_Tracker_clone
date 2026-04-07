@@ -9,6 +9,10 @@ class AccountsController extends GetxController {
 
   RxList<AccountModel> accounts = <AccountModel>[].obs;
 
+  RxList<AccountModel> displayAccounts = <AccountModel>[].obs;
+
+  var accountBalanceTotal = 0.0.obs;
+
   RxBool isLoading = false.obs;
 
   // ================= INIT =================
@@ -27,6 +31,12 @@ class AccountsController extends GetxController {
 
       final data = await _service.getAll();
       accounts.value = data;
+
+      displayAccounts.value = accounts
+          .where((a) => a.isIgnored == false)
+          .toList();
+
+      calculateBalanceSummary();
     } catch (e) {
       print("Account fetch error: $e");
     } finally {
@@ -53,5 +63,16 @@ class AccountsController extends GetxController {
   Future<void> deleteAccount(AccountModel account) async {
     await _service.delete(account);
     await fetchAccounts();
+  }
+
+  // ================= CALCULATIONS =============
+
+  void calculateBalanceSummary() {
+    double balance = 0.0;
+    for (var account in accounts) {
+      balance += account.balance;
+    }
+
+    accountBalanceTotal.value = balance;
   }
 }

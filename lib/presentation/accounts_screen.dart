@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:mymoneyclone/controllers/accounts_controller.dart';
+import 'package:mymoneyclone/core/constants/app_colors.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:mymoneyclone/core/theme/icon_helper.dart';
 import 'package:mymoneyclone/data/models/accounts_model.dart';
@@ -149,10 +150,14 @@ class _AccountsScreenState extends State<AccountsScreen> {
                           AppConstants.amount(account.balance),
                           style: TextStyle(
                             color: !account.isIgnored
-                                ? Theme.of(context).colorScheme.onInverseSurface
+                                ? account.balance >= 0
+                                      ? Theme.of(
+                                          context,
+                                        ).colorScheme.onInverseSurface
+                                      : Theme.of(context).colorScheme.error
                                 : Theme.of(
                                     context,
-                                  ).colorScheme.onInverseSurface.withAlpha(90),
+                                  ).colorScheme.onSurfaceVariant.withAlpha(90),
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
@@ -367,12 +372,13 @@ class _AccountsScreenState extends State<AccountsScreen> {
                   height: 50,
                   width: 50,
                   decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(25),
+                    color: AppColors.whitIcon,
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
                     IconHelper.getIconsaxIcon(account.icon),
                     size: 30,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
                 SizedBox(width: 10),

@@ -18,6 +18,7 @@ class RecordsScreen extends StatefulWidget {
 
 class _RecordsScreenState extends State<RecordsScreen> {
   RecordsController recordsController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return _list();
@@ -37,18 +38,18 @@ class _RecordsScreenState extends State<RecordsScreen> {
         );
       }
 
-      return Padding(
-        padding: const EdgeInsets.only(top: 30),
-        child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: groupedRecordsKyes.length,
-          itemBuilder: (context, index) {
-            String groupKey = groupedRecordsKyes[index];
-            List<RecordModel> records =
-                recordsController.groupedRecords[groupKey]!;
+      return ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: groupedRecordsKyes.length,
+        itemBuilder: (context, index) {
+          String groupKey = groupedRecordsKyes[index];
+          List<RecordModel> records =
+              recordsController.groupedRecords[groupKey]!;
 
-            return Container(
+          return Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: Container(
               margin: EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -70,9 +71,9 @@ class _RecordsScreenState extends State<RecordsScreen> {
                   _recordList(records),
                 ],
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       );
     });
   }
@@ -220,7 +221,7 @@ class _RecordsScreenState extends State<RecordsScreen> {
                                 SizedBox(width: 5),
 
                                 Text(
-                                  account.name,
+                                  transferAccount.name,
                                   style: TextStyle(
                                     color: Theme.of(context)
                                         .colorScheme

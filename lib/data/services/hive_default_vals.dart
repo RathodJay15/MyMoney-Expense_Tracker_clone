@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:mymoneyclone/data/models/records_model.dart';
 import 'package:mymoneyclone/data/models/type_model.dart';
 import '../models/category_model.dart';
 import '../models/accounts_model.dart';
@@ -11,6 +12,8 @@ class HiveDefaultVals {
     final accountBox = Hive.box<AccountModel>(AppConstants.accountHiveBox);
 
     final typeBox = Hive.box<TypeModel>(AppConstants.typeHiveBox);
+
+    final recordBox = Hive.box<RecordModel>(AppConstants.recordHiveBox);
 
     if (categoryBox.isEmpty) {
       await categoryBox.addAll([
@@ -180,22 +183,22 @@ class HiveDefaultVals {
       await accountBox.addAll([
         AccountModel(
           name: 'Card',
-          balance: 0,
-          initialAmount: 0,
+          balance: 10000,
+          initialAmount: 10000,
           icon: 'home_2',
           isIgnored: false,
         ),
         AccountModel(
           name: 'Cash',
-          balance: 0,
-          initialAmount: 0,
+          balance: 5000,
+          initialAmount: 5000,
           icon: 'wallet_3',
           isIgnored: false,
         ),
         AccountModel(
           name: 'Savings',
-          balance: 0,
-          initialAmount: 0,
+          balance: 20000,
+          initialAmount: 20000,
           icon: 'tag',
           isIgnored: false,
         ),
@@ -207,6 +210,214 @@ class HiveDefaultVals {
         TypeModel(name: AppConstants.income),
         TypeModel(name: AppConstants.expense),
         TypeModel(name: AppConstants.transfer),
+      ]);
+    }
+
+    if (recordBox.isEmpty) {
+      await recordBox.addAll([
+        // ================= FEB =================
+
+        // Feb 3
+        RecordModel(
+          type: AppConstants.income,
+          accountId: 0,
+          categoryId: 6, // Salary
+          transferAccountId: null,
+          amount: 5000,
+          note: "Salary Feb",
+          date: DateTime(2026, 2, 3),
+          time: "10:00",
+        ),
+        RecordModel(
+          type: AppConstants.expense,
+          accountId: 1,
+          categoryId: 8, // Food
+          transferAccountId: null,
+          amount: 300,
+          note: "Lunch",
+          date: DateTime(2026, 2, 3),
+          time: "14:00",
+        ),
+
+        // Feb 10
+        RecordModel(
+          type: AppConstants.expense,
+          accountId: 0,
+          categoryId: 10, // Bills
+          transferAccountId: null,
+          amount: 1200,
+          note: "Electric bill",
+          date: DateTime(2026, 2, 10),
+          time: "09:00",
+        ),
+        RecordModel(
+          type: AppConstants.transfer,
+          accountId: 1,
+          categoryId: null,
+          transferAccountId: 2,
+          amount: 1000,
+          note: "Transfer to savings",
+          date: DateTime(2026, 2, 10),
+          time: "18:00",
+        ),
+
+        // Feb 27
+        RecordModel(
+          type: AppConstants.income,
+          accountId: 2,
+          categoryId: 6,
+          transferAccountId: null,
+          amount: 2000,
+          note: "Bonus",
+          date: DateTime(2026, 2, 27),
+          time: "11:00",
+        ),
+        RecordModel(
+          type: AppConstants.expense,
+          accountId: 0,
+          categoryId: 17, // Transportation
+          transferAccountId: null,
+          amount: 150,
+          note: "Auto fare",
+          date: DateTime(2026, 2, 27),
+          time: "19:00",
+        ),
+
+        // ================= MARCH =================
+
+        // March 3
+        RecordModel(
+          type: AppConstants.income,
+          accountId: 0,
+          categoryId: 6,
+          transferAccountId: null,
+          amount: 6000,
+          note: "Salary March",
+          date: DateTime(2026, 3, 3),
+          time: "10:00",
+        ),
+        RecordModel(
+          type: AppConstants.expense,
+          accountId: 1,
+          categoryId: 8,
+          transferAccountId: null,
+          amount: 400,
+          note: "Dinner",
+          date: DateTime(2026, 3, 3),
+          time: "20:00",
+        ),
+
+        // March 10
+        RecordModel(
+          type: AppConstants.expense,
+          accountId: 0,
+          categoryId: 10,
+          transferAccountId: null,
+          amount: 900,
+          note: "Internet",
+          date: DateTime(2026, 3, 10),
+          time: "09:00",
+        ),
+        RecordModel(
+          type: AppConstants.transfer,
+          accountId: 0,
+          categoryId: null,
+          transferAccountId: 2,
+          amount: 1500,
+          note: "Savings transfer",
+          date: DateTime(2026, 3, 10),
+          time: "18:00",
+        ),
+
+        // March 27
+        RecordModel(
+          type: AppConstants.income,
+          accountId: 2,
+          categoryId: 6,
+          transferAccountId: null,
+          amount: 2500,
+          note: "Freelance",
+          date: DateTime(2026, 3, 27),
+          time: "12:00",
+        ),
+        RecordModel(
+          type: AppConstants.expense,
+          accountId: 1,
+          categoryId: 14, // Shopping
+          transferAccountId: null,
+          amount: 700,
+          note: "Clothes",
+          date: DateTime(2026, 3, 27),
+          time: "17:00",
+        ),
+
+        // ================= APRIL =================
+
+        // April 3
+        RecordModel(
+          type: AppConstants.income,
+          accountId: 0,
+          categoryId: 6,
+          transferAccountId: null,
+          amount: 7000,
+          note: "Salary April",
+          date: DateTime(2026, 4, 3),
+          time: "10:00",
+        ),
+        RecordModel(
+          type: AppConstants.expense,
+          accountId: 1,
+          categoryId: 8,
+          transferAccountId: null,
+          amount: 500,
+          note: "Lunch",
+          date: DateTime(2026, 4, 3),
+          time: "13:00",
+        ),
+
+        // April 10
+        RecordModel(
+          type: AppConstants.expense,
+          accountId: 0,
+          categoryId: 10,
+          transferAccountId: null,
+          amount: 1100,
+          note: "Electricity",
+          date: DateTime(2026, 4, 10),
+          time: "09:00",
+        ),
+        RecordModel(
+          type: AppConstants.transfer,
+          accountId: 1,
+          categoryId: null,
+          transferAccountId: 2,
+          amount: 2000,
+          note: "Savings",
+          date: DateTime(2026, 4, 10),
+          time: "18:00",
+        ),
+
+        // April 27
+        RecordModel(
+          type: AppConstants.income,
+          accountId: 2,
+          categoryId: 6,
+          transferAccountId: null,
+          amount: 3000,
+          note: "Bonus",
+          date: DateTime(2026, 4, 27),
+          time: "11:00",
+        ),
+        RecordModel(
+          type: AppConstants.expense,
+          accountId: 0,
+          categoryId: 17,
+          transferAccountId: null,
+          amount: 200,
+          note: "Transport",
+          date: DateTime(2026, 4, 27),
+          time: "20:00",
+        ),
       ]);
     }
   }

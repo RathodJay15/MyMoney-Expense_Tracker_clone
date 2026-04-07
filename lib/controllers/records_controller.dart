@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:mymoneyclone/core/constants/app_helper.dart';
 import 'package:mymoneyclone/data/models/accounts_model.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
@@ -17,16 +19,49 @@ class RecordsController extends GetxController {
 
   // ================= STATE =================
 
+  var _allRecords = <RecordModel>[];
   var records = <RecordModel>[].obs;
   var groupedRecords = <String, List<RecordModel>>{}.obs;
 
   var types = <TypeModel>[].obs;
 
-  var totalIncome = 0.0.obs;
-  var totalExpense = 0.0.obs;
-  var totalBalance = 0.0.obs;
+  var totalIncomeSofar = 0.0.obs;
+  var totalExpenseSofar = 0.0.obs;
 
   var isLoading = false.obs;
+
+  var recordAnalysisMonth = DateTime.now().obs;
+
+  // ================== filter ===================
+
+  void nextMonth() {
+    recordAnalysisMonth.value = DateTime(
+      recordAnalysisMonth.value.year,
+      recordAnalysisMonth.value.month + 1,
+    );
+    filterRecords();
+  }
+
+  void previousMonth() {
+    recordAnalysisMonth.value = DateTime(
+      recordAnalysisMonth.value.year,
+      recordAnalysisMonth.value.month - 1,
+    );
+    filterRecords();
+  }
+
+  void filterRecords() {
+    final month = recordAnalysisMonth.value.month;
+    final year = recordAnalysisMonth.value.year;
+
+    final filtered = _allRecords.where((record) {
+      return record.date.month == month && record.date.year == year;
+    }).toList();
+
+    records.value = filtered;
+
+    _groupRecordsByDate();
+  }
 
   // ================= INIT =================
 
@@ -34,6 +69,7 @@ class RecordsController extends GetxController {
   void onInit() {
     super.onInit();
     fetchRecords();
+    _calculateSofarSummary();
   }
 
   // ================= FETCH =================
@@ -43,12 +79,11 @@ class RecordsController extends GetxController {
       isLoading.value = true;
 
       final data = _service.getAll();
-      records.value = data;
+      _allRecords = data;
 
-      _groupRecordsByDate();
-      _calculateSummary();
+      filterRecords();
     } catch (e) {
-      print("Fetch error: $e");
+      debugPrint("Fetch error: $e");
     } finally {
       isLoading.value = false;
     }
@@ -75,23 +110,53 @@ class RecordsController extends GetxController {
 
   // ================= SUMMARY =================
 
-  void _calculateSummary() {
+  void _calculateSofarSummary() {
     double income = 0;
     double expense = 0;
 
     for (var record in records) {
-      if (record.type == 'income') {
+      if (record.type == AppConstants.income) {
         income += record.amount;
-      } else if (record.type == 'expense') {
+      } else if (record.type == AppConstants.expense) {
         expense += record.amount;
       }
     }
 
-    totalIncome.value = income;
-    totalExpense.value = expense;
-    totalBalance.value = income - expense;
+    totalIncomeSofar.value = income;
+    totalExpenseSofar.value = expense;
   }
 
+  void updateAccountBalance(int id) async {
+    double balance = 0.0;
+
+    AccountModel? account = getAccById(id);
+    if (account == null) return;
+
+    balance = account.initialAmount;
+
+    for (var record in records) {
+      // if income
+      if (record.accountId == id && record.type == AppConstants.income) {
+        balance += record.amount;
+      }
+      // if expense
+      else if (record.accountId == id && record.type == AppConstants.expense) {
+        balance -= record.amount;
+      }
+      // if transfer from
+      else if (record.accountId == id && record.type == AppConstants.transfer) {
+        balance -= record.amount;
+      }
+      // if transfer to
+      else if (record.transferAccountId == id &&
+          record.type == AppConstants.transfer) {
+        balance += record.amount;
+      }
+    }
+
+    account.balance = balance;
+    await _accountsHiveService.update(account);
+  }
   // ================= INSERT =================
 
   Future<void> addRecord(RecordModel record) async {
@@ -103,7 +168,7 @@ class RecordsController extends GetxController {
 
   Future<void> updateRecord(RecordModel record) async {
     await _service.update(record);
-    await fetchRecords();
+    fetchRecords();
   }
 
   // ================= DELETE =================
@@ -111,6 +176,13 @@ class RecordsController extends GetxController {
   Future<void> deleteRecord(RecordModel record) async {
     await _service.delete(record);
     await fetchRecords();
+
+    updateAccountBalance(record.accountId);
+
+    if (record.type == AppConstants.transfer &&
+        record.transferAccountId != null) {
+      updateAccountBalance(record.transferAccountId!);
+    }
   }
 
   //===========================================
