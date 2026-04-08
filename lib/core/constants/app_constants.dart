@@ -22,6 +22,14 @@ class AppConstants {
     return '[ All Accounts ${amount(val)} ]';
   }
 
+  static String totalRecordsInAccount(int length) {
+    return "Total $length records in this account";
+  }
+
+  static String totalRecordsInCategory(int length) {
+    return "Total $length records in this category";
+  }
+
   //App Bar
   static const myMoney = 'MyMoney';
 
@@ -52,6 +60,8 @@ class AppConstants {
   static const category = "Category";
   static const from = "From";
   static const to = "To";
+  static const newToOld = "NEW TO OLD";
+  static const oldToNew = "OLD TO NEW";
 
   //Record screen
   static const addNotes = "Add notes";
@@ -79,6 +89,7 @@ class AppConstants {
   static const editAcc = "EDIT ACCOUNT";
   static const initAmountVal = "0";
   static const deleteThisAcc = "Delete this account?";
+  static const oneRecordInAcc = "Only one record in this account";
   static const deletingAccMsg =
       "Deleting this account will also delete all records and budgets for this account. Are you sure?";
   static const ingnoreThisAcc = "Ingnore this account?";
@@ -96,6 +107,7 @@ class AppConstants {
   static const catDetails = "Category details";
   static const noRecordInThisCat = "No record in this category";
   static const deleteThisCat = "Delete this category?";
+  static const oneRecordInCat = "Only one record in this category";
   static const deletingCatMsg =
       "Deleting this category will also delete all records and budgets for this category. Are you sure?";
   static const ingnoreThisCat = "Ingnore this category?";

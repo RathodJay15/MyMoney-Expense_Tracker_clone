@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:mymoneyclone/controllers/categories_controller.dart';
+import 'package:mymoneyclone/controllers/records_controller.dart';
 import 'package:mymoneyclone/core/constants/app_colors.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
+import 'package:mymoneyclone/core/constants/app_helper.dart';
 import 'package:mymoneyclone/core/theme/icon_helper.dart';
+import 'package:mymoneyclone/data/models/accounts_model.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
+import 'package:mymoneyclone/data/models/records_model.dart';
 import 'package:mymoneyclone/presentation/widgets/add_category.dart';
 import 'package:mymoneyclone/presentation/widgets/mymoney_alertdialog.dart';
+import 'package:mymoneyclone/presentation/widgets/record_detail_dialog.dart';
 
 class CategoriesScreen extends StatefulWidget {
   @override
@@ -17,6 +22,7 @@ class CategoriesScreen extends StatefulWidget {
 class _CategoriesScreenState extends State<CategoriesScreen> {
   // CategoryController catController = Get.put(CategoryController());
   CategoryController catController = Get.find();
+  RecordsController recController = Get.find();
 
   bool isExpense = false;
 
@@ -56,8 +62,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   Widget _listItem(CategoryModel category) {
     return InkWell(
-      splashColor: Theme.of(context).colorScheme.onSurfaceVariant.withAlpha(50),
+      splashColor: category.isIgnored
+          ? Colors.transparent
+          : Theme.of(context).colorScheme.onSurfaceVariant.withAlpha(50),
       onTap: () {
+        if (category.isIgnored) return;
         showModalBottomSheet(
           context: context,
           isScrollControlled: true,
@@ -270,149 +279,154 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
 
   Widget displayCat(CategoryModel category) {
-    final list = [];
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onPrimary,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            color: Theme.of(context).colorScheme.surface,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: Icon(Iconsax.close_circle_copy, size: 40),
-                  ),
-                  SizedBox(width: 5),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppConstants.catDetails,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+    final records = recController.fetchRecordByCategory(category.key);
+    return Obx(() {
+      var orderedRecords = records[catController.recordOrder.value];
+      final groupedRecordsKyes = orderedRecords!.keys.toList();
+      return Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.onPrimary,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              color: Theme.of(context).colorScheme.surface,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      icon: Icon(Iconsax.close_circle_copy, size: 40),
+                    ),
+                    SizedBox(width: 5),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppConstants.catDetails,
+                          style: TextStyle(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        AppConstants.recordsAllTime,
-                        style: TextStyle(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurfaceVariant.withAlpha(180),
-                          fontSize: 14,
+                        Text(
+                          AppConstants.recordsAllTime,
+                          style: TextStyle(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant.withAlpha(180),
+                            fontSize: 14,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Icon(
-                    IconHelper.getIconsaxIcon(category.icon),
-                    size: 30,
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        category.name,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        category.type == AppConstants.expense
-                            ? AppConstants.expenseCategory
-                            : AppConstants.incomeCategory,
-                        style: TextStyle(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.onSurfaceVariant.withAlpha(180),
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(20),
-            child: Container(
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface.withAlpha(100),
-                border: BoxBorder.all(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.onSurfaceVariant.withAlpha(90),
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
-                    Iconsax.info_circle_copy,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.blueAccent,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Icon(
+                      IconHelper.getIconsaxIcon(category.icon),
+                      size: 30,
+                    ),
                   ),
-                  SizedBox(width: 5),
-                  SizedBox(
-                    width: MediaQuery.maybeWidthOf(context)! * 0.80,
-                    child: Text(
-                      AppConstants.analysisDialog,
-                      maxLines: 2,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          category.name,
+                          style: TextStyle(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          category.type == AppConstants.expense
+                              ? AppConstants.expenseCategory
+                              : AppConstants.incomeCategory,
+                          style: TextStyle(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant.withAlpha(180),
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-
-          Expanded(
-            child: list.isEmpty
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Container(
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface.withAlpha(100),
+                  border: BoxBorder.all(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurfaceVariant.withAlpha(90),
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Iconsax.info_circle_copy,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                    SizedBox(width: 5),
+                    SizedBox(
+                      width: MediaQuery.maybeWidthOf(context)! * 0.80,
+                      child: Text(
+                        AppConstants.analysisDialog,
+                        maxLines: 2,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            groupedRecordsKyes.isEmpty
                 ? Text(
                     AppConstants.noRecordInThisCat,
                     textAlign:
@@ -423,15 +437,217 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   )
-                : ListView.builder(
-                    itemCount: list.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(title: Text('Item $index'));
-                    },
+                : orderedRecords.length == 1
+                ? Text(
+                    AppConstants.oneRecordInCat,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          AppConstants.totalRecordsInCategory(
+                            orderedRecords.length,
+                          ),
+                          style: TextStyle(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: catController.changeRecordOrder,
+                            borderRadius: BorderRadius.circular(8),
+                            splashColor: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant.withAlpha(50),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Iconsax.sort_copy,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant
+                                        .withAlpha(150),
+                                    size: 25,
+                                  ),
+                                  Text(
+                                    catController.recordOrder.value,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant
+                                          .withAlpha(150),
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: groupedRecordsKyes.length,
+                itemBuilder: (context, index) {
+                  String groupKey = groupedRecordsKyes[index];
+                  List<RecordModel> records = orderedRecords[groupKey]!;
+
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            groupKey,
+                            style: TextStyle(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Divider(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                            height: 0,
+                          ),
+                          _recordList(records, category),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget _recordList(List<RecordModel> records, CategoryModel category) {
+    return ListView.separated(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: records.length,
+      separatorBuilder: (context, index) {
+        return Divider(
+          color: Theme.of(context).colorScheme.onPrimary,
+          thickness: 1,
+          indent: 60,
+          endIndent: 10,
+          height: 4,
+        );
+      },
+      itemBuilder: (context, index) {
+        final record = records[index];
+        AccountModel? account = recController.getAccById(record.accountId);
+
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return RecordDetailDialog(record: record);
+                },
+              );
+            },
+            splashColor: Theme.of(
+              context,
+            ).colorScheme.onSurfaceVariant.withAlpha(50),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "•",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurfaceVariant.withAlpha(150),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    AppHelper.getFormattedDateString2(record.date),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurfaceVariant.withAlpha(150),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+
+                  Text(
+                    record.time,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurfaceVariant.withAlpha(150),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+
+                  Expanded(
+                    child: Text(
+                      account!.name,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    AppConstants.amount(record.amount),
+                    style: TextStyle(
+                      color: record.type == AppConstants.transfer
+                          ? Colors.blueAccent
+                          : record.type == AppConstants.expense
+                          ? Theme.of(context).colorScheme.error
+                          : Theme.of(context).colorScheme.onInverseSurface,
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                ],
+              ),
+            ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

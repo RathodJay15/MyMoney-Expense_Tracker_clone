@@ -6,6 +6,10 @@ class AppHelper {
     return DateFormat().add_yMMMd().format(selectedDate);
   }
 
+  static String getFormattedDateString2(DateTime selectedDate) {
+    return DateFormat('MMM dd').format(selectedDate);
+  }
+
   static DateTime getFormattedDateTime(String selectedDate) {
     return DateFormat.yMMMd().parse(selectedDate);
   }

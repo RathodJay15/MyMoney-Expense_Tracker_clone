@@ -253,7 +253,9 @@ class _RecordDetailDialogState extends State<RecordDetailDialog> {
                                 ),
                           SizedBox(width: 5),
                           Text(
-                            account.name,
+                            widget.record.type == AppConstants.transfer
+                                ? transferAccount!.name
+                                : category!.name,
                             style: TextStyle(
                               color: Theme.of(
                                 context,

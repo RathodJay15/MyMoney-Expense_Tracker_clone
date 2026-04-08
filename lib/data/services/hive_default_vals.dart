@@ -226,7 +226,7 @@ class HiveDefaultVals {
           amount: 5000,
           note: "Salary Feb",
           date: DateTime(2026, 2, 3),
-          time: "10:00",
+          time: "10:00 AM",
         ),
         RecordModel(
           type: AppConstants.expense,
@@ -236,7 +236,7 @@ class HiveDefaultVals {
           amount: 300,
           note: "Lunch",
           date: DateTime(2026, 2, 3),
-          time: "14:00",
+          time: "2:00 PM",
         ),
 
         // Feb 10
@@ -248,7 +248,7 @@ class HiveDefaultVals {
           amount: 1200,
           note: "Electric bill",
           date: DateTime(2026, 2, 10),
-          time: "09:00",
+          time: "9:00 AM",
         ),
         RecordModel(
           type: AppConstants.transfer,
@@ -258,7 +258,7 @@ class HiveDefaultVals {
           amount: 1000,
           note: "Transfer to savings",
           date: DateTime(2026, 2, 10),
-          time: "18:00",
+          time: "6:00 PM",
         ),
 
         // Feb 27
@@ -270,7 +270,7 @@ class HiveDefaultVals {
           amount: 2000,
           note: "Bonus",
           date: DateTime(2026, 2, 27),
-          time: "11:00",
+          time: "11:00 AM",
         ),
         RecordModel(
           type: AppConstants.expense,
@@ -280,7 +280,7 @@ class HiveDefaultVals {
           amount: 150,
           note: "Auto fare",
           date: DateTime(2026, 2, 27),
-          time: "19:00",
+          time: "7:00 PM",
         ),
 
         // ================= MARCH =================
@@ -294,7 +294,7 @@ class HiveDefaultVals {
           amount: 6000,
           note: "Salary March",
           date: DateTime(2026, 3, 3),
-          time: "10:00",
+          time: "10:00 AM",
         ),
         RecordModel(
           type: AppConstants.expense,
@@ -304,7 +304,7 @@ class HiveDefaultVals {
           amount: 400,
           note: "Dinner",
           date: DateTime(2026, 3, 3),
-          time: "20:00",
+          time: "10:00 PM",
         ),
 
         // March 10
@@ -316,7 +316,7 @@ class HiveDefaultVals {
           amount: 900,
           note: "Internet",
           date: DateTime(2026, 3, 10),
-          time: "09:00",
+          time: "9:00 AM",
         ),
         RecordModel(
           type: AppConstants.transfer,
@@ -326,7 +326,7 @@ class HiveDefaultVals {
           amount: 1500,
           note: "Savings transfer",
           date: DateTime(2026, 3, 10),
-          time: "18:00",
+          time: "6:00 PM",
         ),
 
         // March 27
@@ -338,7 +338,7 @@ class HiveDefaultVals {
           amount: 2500,
           note: "Freelance",
           date: DateTime(2026, 3, 27),
-          time: "12:00",
+          time: "12:00 PM",
         ),
         RecordModel(
           type: AppConstants.expense,
@@ -348,7 +348,7 @@ class HiveDefaultVals {
           amount: 700,
           note: "Clothes",
           date: DateTime(2026, 3, 27),
-          time: "17:00",
+          time: "5:00 PM",
         ),
 
         // ================= APRIL =================
@@ -362,7 +362,7 @@ class HiveDefaultVals {
           amount: 7000,
           note: "Salary April",
           date: DateTime(2026, 4, 3),
-          time: "10:00",
+          time: "10:00 AM",
         ),
         RecordModel(
           type: AppConstants.expense,
@@ -372,7 +372,7 @@ class HiveDefaultVals {
           amount: 500,
           note: "Lunch",
           date: DateTime(2026, 4, 3),
-          time: "13:00",
+          time: "1:00 PM",
         ),
 
         // April 10
@@ -384,7 +384,7 @@ class HiveDefaultVals {
           amount: 1100,
           note: "Electricity",
           date: DateTime(2026, 4, 10),
-          time: "09:00",
+          time: "9:00 AM",
         ),
         RecordModel(
           type: AppConstants.transfer,
@@ -394,7 +394,7 @@ class HiveDefaultVals {
           amount: 2000,
           note: "Savings",
           date: DateTime(2026, 4, 10),
-          time: "18:00",
+          time: "6:00 PM",
         ),
 
         // April 27
@@ -406,7 +406,7 @@ class HiveDefaultVals {
           amount: 3000,
           note: "Bonus",
           date: DateTime(2026, 4, 27),
-          time: "11:00",
+          time: "11:00 AM",
         ),
         RecordModel(
           type: AppConstants.expense,
@@ -416,7 +416,7 @@ class HiveDefaultVals {
           amount: 200,
           note: "Transport",
           date: DateTime(2026, 4, 27),
-          time: "20:00",
+          time: "10:00 PM",
         ),
       ]);
     }

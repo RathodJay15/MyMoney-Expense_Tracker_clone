@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:mymoneyclone/data/models/accounts_model.dart';
 import 'package:mymoneyclone/data/services/accounts_hive_service.dart';
 
@@ -74,5 +75,14 @@ class AccountsController extends GetxController {
     }
 
     accountBalanceTotal.value = balance;
+  }
+
+  // ==============================================
+  RxString recordOrder = AppConstants.newToOld.obs;
+
+  void changeRecordOrder() {
+    recordOrder.value = recordOrder.value == AppConstants.newToOld
+        ? AppConstants.oldToNew
+        : AppConstants.newToOld;
   }
 }

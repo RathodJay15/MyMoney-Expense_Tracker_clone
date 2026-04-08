@@ -138,7 +138,7 @@ class _RecordsScreenState extends State<RecordsScreen> {
                   ),
                   child: Icon(
                     record.transferAccountId == null
-                        ? IconHelper.getIconsaxIcon(account!.icon)
+                        ? IconHelper.getIconsaxIcon(category!.icon)
                         : Iconsax.arrow_swap_horizontal_copy,
                     size: 30,
                   ),

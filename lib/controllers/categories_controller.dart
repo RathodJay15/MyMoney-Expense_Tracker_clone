@@ -72,4 +72,13 @@ class CategoryController extends GetxController {
     await _service.delete(category);
     await fetchCategories();
   }
+
+  // ==========================================
+  RxString recordOrder = AppConstants.newToOld.obs;
+
+  void changeRecordOrder() {
+    recordOrder.value = recordOrder.value == AppConstants.newToOld
+        ? AppConstants.oldToNew
+        : AppConstants.newToOld;
+  }
 }

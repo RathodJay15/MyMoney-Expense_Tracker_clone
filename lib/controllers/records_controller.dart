@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:mymoneyclone/core/constants/app_helper.dart';
 import 'package:mymoneyclone/data/models/accounts_model.dart';
@@ -183,6 +184,108 @@ class RecordsController extends GetxController {
         record.transferAccountId != null) {
       updateAccountBalance(record.transferAccountId!);
     }
+  }
+
+  // ==========================================
+
+  Map<String, Map<String, List<RecordModel>>> fetchRecordByAccount(int id) {
+    final accountRecords = _allRecords.where((r) => r.accountId == id).toList();
+
+    Map<String, List<RecordModel>> tempGrouped = {};
+
+    for (var record in accountRecords) {
+      final sortKey =
+          "${record.date.year}-${record.date.month.toString().padLeft(2, '0')}";
+
+      if (!tempGrouped.containsKey(sortKey)) {
+        tempGrouped[sortKey] = [];
+      }
+      tempGrouped[sortKey]!.add(record);
+    }
+
+    final ascKeys = tempGrouped.keys.toList()..sort();
+    final descKeys = tempGrouped.keys.toList()..sort((a, b) => b.compareTo(a));
+
+    Map<String, List<RecordModel>> ascMap = {};
+    Map<String, List<RecordModel>> descMap = {};
+
+    for (var key in ascKeys) {
+      final recordsList = tempGrouped[key]!;
+
+      recordsList.sort((a, b) => a.date.compareTo(b.date));
+
+      final dateParts = key.split("-");
+      final formattedKey = DateFormat(
+        'MMMM yyyy',
+      ).format(DateTime(int.parse(dateParts[0]), int.parse(dateParts[1])));
+
+      ascMap[formattedKey] = recordsList;
+    }
+
+    for (var key in descKeys) {
+      final recordsList = [...tempGrouped[key]!]; // clone list
+
+      recordsList.sort((a, b) => b.date.compareTo(a.date));
+
+      final dateParts = key.split("-");
+      final formattedKey = DateFormat(
+        'MMMM yyyy',
+      ).format(DateTime(int.parse(dateParts[0]), int.parse(dateParts[1])));
+
+      descMap[formattedKey] = recordsList;
+    }
+
+    return {AppConstants.oldToNew: ascMap, AppConstants.newToOld: descMap};
+  }
+
+  Map<String, Map<String, List<RecordModel>>> fetchRecordByCategory(int id) {
+    final catRecords = _allRecords.where((r) => r.categoryId == id).toList();
+
+    Map<String, List<RecordModel>> tempGrouped = {};
+
+    for (var record in catRecords) {
+      final sortKey =
+          "${record.date.year}-${record.date.month.toString().padLeft(2, '0')}";
+
+      if (!tempGrouped.containsKey(sortKey)) {
+        tempGrouped[sortKey] = [];
+      }
+      tempGrouped[sortKey]!.add(record);
+    }
+
+    final ascKeys = tempGrouped.keys.toList()..sort();
+    final descKeys = tempGrouped.keys.toList()..sort((a, b) => b.compareTo(a));
+
+    Map<String, List<RecordModel>> ascMap = {};
+    Map<String, List<RecordModel>> descMap = {};
+
+    for (var key in ascKeys) {
+      final recordsList = tempGrouped[key]!;
+
+      recordsList.sort((a, b) => a.date.compareTo(b.date));
+
+      final dateParts = key.split("-");
+      final formattedKey = DateFormat(
+        'MMMM yyyy',
+      ).format(DateTime(int.parse(dateParts[0]), int.parse(dateParts[1])));
+
+      ascMap[formattedKey] = recordsList;
+    }
+
+    for (var key in descKeys) {
+      final recordsList = [...tempGrouped[key]!]; // clone list
+
+      recordsList.sort((a, b) => b.date.compareTo(a.date));
+
+      final dateParts = key.split("-");
+      final formattedKey = DateFormat(
+        'MMMM yyyy',
+      ).format(DateTime(int.parse(dateParts[0]), int.parse(dateParts[1])));
+
+      descMap[formattedKey] = recordsList;
+    }
+
+    return {AppConstants.oldToNew: ascMap, AppConstants.newToOld: descMap};
   }
 
   //===========================================
