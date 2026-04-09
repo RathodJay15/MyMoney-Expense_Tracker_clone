@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AppConstants {
@@ -50,8 +51,8 @@ class AppConstants {
   static const incon = "Icon";
   static const edit = "Edit";
   static const delete = "Delete";
-  static const yes = "Yes";
-  static const no = "No";
+  static const yes = "YES";
+  static const no = "NO";
   static const options = "Options";
   static const ignore = "Ignore";
   static const restore = "Restore";
@@ -62,6 +63,20 @@ class AppConstants {
   static const to = "To";
   static const newToOld = "NEW TO OLD";
   static const oldToNew = "OLD TO NEW";
+  static const daily = "DAILY";
+  static const weekly = "WEEKLY";
+  static const monthly = "MONTHLY";
+  static const threeMonths = "3 MONTHS \u2605";
+  static const sixMonths = "6 MONTHS \u2605";
+  static const yearly = "YEARLY \u2605";
+  static const displayOptions = "Display Options";
+  static const viewMode = "View mode:";
+  static const showTotal = "Show total:";
+  static const on = "ON";
+  static const off = "OFF";
+  static const carryOver = "Carry over";
+  static const carryOverMsg =
+      "With Carry over enabled, monthly surplus will be added to the next month.";
 
   //Record screen
   static const addNotes = "Add notes";

@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
-import 'package:mymoneyclone/core/constants/app_helper.dart';
 import 'package:mymoneyclone/data/models/accounts_model.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
 import 'package:mymoneyclone/data/models/records_model.dart';
@@ -21,7 +20,7 @@ class RecordsController extends GetxController {
   // ================= STATE =================
 
   var _allRecords = <RecordModel>[];
-  var records = <RecordModel>[].obs;
+  var filtredRecords = <RecordModel>[].obs;
   var groupedRecords = <String, List<RecordModel>>{}.obs;
 
   var types = <TypeModel>[].obs;
@@ -29,40 +28,19 @@ class RecordsController extends GetxController {
   var totalIncomeSofar = 0.0.obs;
   var totalExpenseSofar = 0.0.obs;
 
+  var totalIncome = 0.0.obs;
+  var totalExpense = 0.0.obs;
+  var totalBalance = 0.0.obs;
+
   var isLoading = false.obs;
 
   var recordAnalysisMonth = DateTime.now().obs;
 
-  // ================== filter ===================
+  var selectedMode = AppConstants.monthly.obs; // monthly , daily , weekly
 
-  void nextMonth() {
-    recordAnalysisMonth.value = DateTime(
-      recordAnalysisMonth.value.year,
-      recordAnalysisMonth.value.month + 1,
-    );
-    filterRecords();
-  }
+  var showTotal = AppConstants.yes.obs;
 
-  void previousMonth() {
-    recordAnalysisMonth.value = DateTime(
-      recordAnalysisMonth.value.year,
-      recordAnalysisMonth.value.month - 1,
-    );
-    filterRecords();
-  }
-
-  void filterRecords() {
-    final month = recordAnalysisMonth.value.month;
-    final year = recordAnalysisMonth.value.year;
-
-    final filtered = _allRecords.where((record) {
-      return record.date.month == month && record.date.year == year;
-    }).toList();
-
-    records.value = filtered;
-
-    _groupRecordsByDate();
-  }
+  var surplus = AppConstants.off.obs;
 
   // ================= INIT =================
 
@@ -71,6 +49,19 @@ class RecordsController extends GetxController {
     super.onInit();
     fetchRecords();
     _calculateSofarSummary();
+  }
+
+  void changeMode(String mode) {
+    selectedMode.value = mode;
+    _groupRecords();
+  }
+
+  void toggleShowTotal(String mode) {
+    showTotal.value = mode;
+  }
+
+  void toggleSurplus(String mode) {
+    surplus.value = mode;
   }
 
   // ================= FETCH =================
@@ -94,28 +85,121 @@ class RecordsController extends GetxController {
     types.value = _tServise.getAll();
   }
 
-  // ================= GROUPING =================
+  void filterRecords() {
+    final d = recordAnalysisMonth.value;
 
-  void _groupRecordsByDate() {
-    Map<String, List<RecordModel>> grouped = {};
-
-    for (var record in records) {
-      if (!grouped.containsKey(AppHelper.getFormattedDateString(record.date))) {
-        grouped[AppHelper.getFormattedDateString(record.date)] = [];
+    final filtered = _allRecords.where((r) {
+      // DAILY
+      if (selectedMode.value == AppConstants.daily) {
+        return r.date.year == d.year &&
+            r.date.month == d.month &&
+            r.date.day == d.day;
       }
-      grouped[AppHelper.getFormattedDateString(record.date)]!.add(record);
-    }
 
-    groupedRecords.value = grouped;
+      // WEEKLY
+      if (selectedMode.value == AppConstants.weekly) {
+        final start = d.subtract(Duration(days: d.weekday - 1));
+        final end = start.add(Duration(days: 6));
+
+        return r.date.isAfter(start.subtract(Duration(days: 2))) &&
+            r.date.isBefore(end);
+      }
+
+      // MONTHLY
+      return r.date.year == d.year && r.date.month == d.month;
+    }).toList();
+
+    filtredRecords.value = filtered;
+    _calculateRecordSummary();
+    _groupRecords();
   }
 
-  // ================= SUMMARY =================
+  void _groupRecords() {
+    filtredRecords.sort((a, b) => b.date.compareTo(a.date));
+
+    Map<String, List<RecordModel>> map = {};
+    for (var r in filtredRecords) {
+      String key = DateFormat('dd MMM yyyy').format(r.date);
+
+      if (!map.containsKey(key)) {
+        map[key] = [];
+      }
+
+      map[key]!.add(r);
+    }
+
+    groupedRecords.value = map;
+  }
+
+  void nextPeriod() {
+    final d = recordAnalysisMonth.value;
+
+    if (selectedMode.value == AppConstants.daily) {
+      recordAnalysisMonth.value = d.add(Duration(days: 1));
+    } else if (selectedMode.value == AppConstants.weekly) {
+      recordAnalysisMonth.value = d.add(Duration(days: 7));
+    } else {
+      recordAnalysisMonth.value = DateTime(d.year, d.month + 1);
+    }
+
+    filterRecords();
+  }
+
+  String getFormattedHeaderDate() {
+    final date = recordAnalysisMonth.value;
+
+    switch (selectedMode.value) {
+      case AppConstants.daily:
+        return DateFormat('MMM dd, yyyy').format(date);
+
+      case AppConstants.weekly:
+        final startOfWeek = date.subtract(Duration(days: date.weekday - 1));
+        final endOfWeek = startOfWeek.add(Duration(days: 6));
+
+        return "${DateFormat('MMM dd').format(startOfWeek)} - ${DateFormat('MMM dd').format(endOfWeek)}";
+
+      case AppConstants.monthly:
+      default:
+        return DateFormat('MMMM yyyy').format(date);
+    }
+  }
+
+  void previousPeriod() {
+    final d = recordAnalysisMonth.value;
+
+    if (selectedMode.value == AppConstants.daily) {
+      recordAnalysisMonth.value = d.subtract(Duration(days: 1));
+    } else if (selectedMode.value == AppConstants.weekly) {
+      recordAnalysisMonth.value = d.subtract(Duration(days: 7));
+    } else {
+      recordAnalysisMonth.value = DateTime(d.year, d.month - 1);
+    }
+
+    filterRecords();
+  }
+
+  void _calculateRecordSummary() {
+    double income = 0;
+    double expense = 0;
+
+    for (var r in filtredRecords) {
+      if (r.type == AppConstants.income) {
+        income += r.amount;
+      } else if (r.type == AppConstants.expense) {
+        expense += r.amount;
+      }
+    }
+
+    totalIncome.value = income;
+    totalExpense.value = expense;
+    totalBalance.value = income - expense;
+  }
 
   void _calculateSofarSummary() {
     double income = 0;
     double expense = 0;
 
-    for (var record in records) {
+    for (var record in _allRecords) {
       if (record.type == AppConstants.income) {
         income += record.amount;
       } else if (record.type == AppConstants.expense) {
@@ -135,7 +219,7 @@ class RecordsController extends GetxController {
 
     balance = account.initialAmount;
 
-    for (var record in records) {
+    for (var record in _allRecords) {
       // if income
       if (record.accountId == id && record.type == AppConstants.income) {
         balance += record.amount;

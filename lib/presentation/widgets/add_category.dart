@@ -87,65 +87,81 @@ class _CategoryDialogState extends State<CategoryDialog> {
 
                         const SizedBox(width: 10),
 
-                        GestureDetector(
-                          onTap: () => setState(() => isExpense = false),
-                          child: Row(
-                            children: [
-                              if (!isExpense)
-                                Icon(
-                                  Iconsax.tick_circle_copy,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                  size: 16,
-                                ),
-                              SizedBox(width: 4),
-                              Text(
-                                AppConstants.income,
-                                style: TextStyle(
-                                  color: !isExpense
-                                      ? Theme.of(
-                                          context,
-                                        ).colorScheme.onSurfaceVariant
-                                      : Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant
-                                            .withAlpha(120),
-                                ),
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => setState(() => isExpense = false),
+                            splashColor: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant.withAlpha(50),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  if (!isExpense)
+                                    Icon(
+                                      Iconsax.tick_circle_copy,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
+                                      size: 16,
+                                    ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    AppConstants.income,
+                                    style: TextStyle(
+                                      color: !isExpense
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.onSurfaceVariant
+                                          : Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant
+                                                .withAlpha(120),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
 
-                        const SizedBox(width: 20),
-
-                        GestureDetector(
-                          onTap: () => setState(() => isExpense = true),
-                          child: Row(
-                            children: [
-                              if (isExpense)
-                                Icon(
-                                  Iconsax.tick_circle_copy,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurfaceVariant,
-                                  size: 16,
-                                ),
-                              SizedBox(width: 4),
-                              Text(
-                                AppConstants.expense,
-                                style: TextStyle(
-                                  color: isExpense
-                                      ? Theme.of(
-                                          context,
-                                        ).colorScheme.onSurfaceVariant
-                                      : Theme.of(context)
-                                            .colorScheme
-                                            .onSurfaceVariant
-                                            .withAlpha(120),
-                                ),
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => setState(() => isExpense = true),
+                            splashColor: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant.withAlpha(50),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  if (isExpense)
+                                    Icon(
+                                      Iconsax.tick_circle_copy,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
+                                      size: 16,
+                                    ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    AppConstants.expense,
+                                    style: TextStyle(
+                                      color: isExpense
+                                          ? Theme.of(
+                                              context,
+                                            ).colorScheme.onSurfaceVariant
+                                          : Theme.of(context)
+                                                .colorScheme
+                                                .onSurfaceVariant
+                                                .withAlpha(120),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ],
