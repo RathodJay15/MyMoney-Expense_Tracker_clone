@@ -11,7 +11,7 @@ import 'package:mymoneyclone/data/models/category_model.dart';
 import 'package:mymoneyclone/data/models/records_model.dart';
 import 'package:mymoneyclone/data/models/type_model.dart';
 import 'package:mymoneyclone/data/services/hive_default_vals.dart';
-import '/presentation/home_screen.dart';
+import 'presentation/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,8 +48,7 @@ class MainApp extends StatelessWidget {
     return GetMaterialApp(
       initialBinding: MymoneyBindings(),
       theme: MyMoneyTheme.lightTheme,
-      darkTheme: MyMoneyTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
       home: Scaffold(body: HomeScreen()),
     );

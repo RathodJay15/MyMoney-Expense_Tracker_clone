@@ -6,59 +6,59 @@ class IconHelper {
     switch (iconName) {
       // ===== INCOME =====
       case "award":
-        return Iconsax.award;
+        return Iconsax.award_copy;
       case "ticket_discount":
-        return Iconsax.ticket_discount;
+        return Iconsax.ticket_discount_copy;
       case "gift":
-        return Iconsax.gift;
+        return Iconsax.gift_copy;
       case "ticket_star":
-        return Iconsax.ticket_star;
+        return Iconsax.ticket_star_copy;
       case "money_recive":
-        return Iconsax.money_recive;
+        return Iconsax.money_recive_copy;
       case "home_2":
-        return Iconsax.home_2;
+        return Iconsax.home_2_copy;
       case "wallet_3":
-        return Iconsax.wallet_3;
+        return Iconsax.wallet_3_copy;
       case "tag":
-        return Iconsax.tag;
+        return Iconsax.tag_copy;
 
       // ===== EXPENSE =====
       case "happyemoji":
-        return Iconsax.happyemoji;
+        return Iconsax.happyemoji_copy;
       case "brush_2":
-        return Iconsax.brush_2;
+        return Iconsax.brush_1_copy;
       case "receipt_item":
-        return Iconsax.receipt_item;
+        return Iconsax.receipt_item_copy;
       case "car":
-        return Iconsax.car;
+        return Iconsax.car_copy;
       case "shop":
-        return Iconsax.shop;
+        return Iconsax.shop_copy;
       case "teacher":
-        return Iconsax.teacher;
+        return Iconsax.teacher_copy;
       case "device_message":
-        return Iconsax.device_message;
+        return Iconsax.device_message_copy;
       case "video_play":
-        return Iconsax.video_play;
+        return Iconsax.video_play_copy;
       case "milk":
-        return Iconsax.milk;
+        return Iconsax.milk_copy;
       case "heart":
-        return Iconsax.heart;
+        return Iconsax.heart_copy;
       case "home":
-        return Iconsax.home;
+        return Iconsax.home_1_copy;
       case "security_safe":
-        return Iconsax.security_safe;
+        return Iconsax.security_safe_copy;
       case "shopping_cart":
-        return Iconsax.shopping_cart;
+        return Iconsax.shopping_cart_copy;
       case "people":
-        return Iconsax.people;
+        return Iconsax.people_copy;
       case "cup":
-        return Iconsax.cup;
+        return Iconsax.cup_copy;
       case "receipt_edit":
-        return Iconsax.receipt_edit;
+        return Iconsax.receipt_edit_copy;
       case "call":
-        return Iconsax.call;
+        return Iconsax.call_copy;
       case "bus":
-        return Iconsax.bus;
+        return Iconsax.bus_copy;
 
       default:
         return Iconsax.category;

@@ -1,312 +1,268 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:mymoneyclone/controllers/accounts_controller.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:mymoneyclone/controllers/records_controller.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:mymoneyclone/presentation/accounts_screen.dart';
-import 'package:mymoneyclone/presentation/add_record_screen.dart';
-import 'package:mymoneyclone/presentation/analysis_screen.dart';
-import 'package:mymoneyclone/presentation/budget_screen.dart';
-import 'package:mymoneyclone/presentation/categories_screen.dart';
-import 'package:mymoneyclone/presentation/records_screen.dart';
+import 'package:mymoneyclone/core/theme/icon_helper.dart';
+import 'package:mymoneyclone/data/models/accounts_model.dart';
+import 'package:mymoneyclone/data/models/category_model.dart';
+import 'package:mymoneyclone/data/models/records_model.dart';
+import 'package:mymoneyclone/presentation/category_screen.dart';
+import 'package:mymoneyclone/presentation/widgets/empty_satate.dart';
+import 'package:mymoneyclone/presentation/widgets/record_detail_dialog.dart';
+import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> {
   RecordsController recordsController = Get.find();
-  AccountsController accountsController = Get.find();
-
-  int _selectedIndex = 0;
 
   void _addNewRecord() {
-    Get.to(AddRecordScreen(oldRecord: null));
+    // Get.to(AddRecordScreen(oldRecord: null));
   }
 
+  int selected = 0;
+
   @override
-  Widget build(BuildContext) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      drawer: Drawer(
-        backgroundColor: Theme.of(context).colorScheme.onPrimary,
-        child: ListView(
-          children: [
-            ListTile(
-              title: Text(
-                AppConstants.myMoney,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Iconsax.setting_2_copy,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              title: Text(
-                "Preferences",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Iconsax.document_download_copy,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              title: Text(
-                "Export records",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Iconsax.save_2_copy,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              title: Text(
-                "Backup & Restore",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Iconsax.trash_copy,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              title: Text(
-                "Delete & Reset",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Iconsax.star_copy,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              title: Text(
-                "Pro version",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Iconsax.like_1_copy,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              title: Text(
-                "Like MyMoney",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Iconsax.info_circle_copy,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              title: Text(
-                "Help",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(
-                Iconsax.send_2_copy,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              title: Text(
-                "Feedback",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ),
-          ],
-        ),
+  Widget build(BuildContext context) {
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        systemNavigationBarColor: Theme.of(context).colorScheme.onSurface,
+        statusBarColor: Theme.of(context).colorScheme.primary,
       ),
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              toolbarHeight: 40,
-              snap: true,
-              floating: true,
-              backgroundColor: Theme.of(context).colorScheme.onPrimary,
-              surfaceTintColor: Colors.transparent,
-              centerTitle: false,
-              iconTheme: IconThemeData(
-                color: Theme.of(context).colorScheme.primary,
-              ),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.onSurface,
 
-              title: Text(
-                AppConstants.myMoney,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-
-              actions: [
-                Icon(
-                  Icons.search,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                SizedBox(width: 10),
-              ],
-            ),
-
-            _selectedIndex == 0 || _selectedIndex == 1
-                ? _recordsAnalysisAppbar()
-                : SliverToBoxAdapter(child: SizedBox()),
-
-            _selectedIndex == 2
-                ? _budgetAppBar()
-                : SliverToBoxAdapter(child: SizedBox()),
-
-            _selectedIndex == 3 || _selectedIndex == 4
-                ? _accountsCategoryAppBar()
-                : SliverToBoxAdapter(child: SizedBox()),
-
-            SliverFillRemaining(
-              child: IndexedStack(
-                index: _selectedIndex,
-                children: [
-                  RecordsScreen(),
-                  AnalysisScreen(),
-                  BudgetScreen(),
-                  AccountsScreen(),
-                  CategoriesScreen(),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: Container(
-        height: 60,
-        width: 60,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onPrimary,
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: const Color.fromARGB(47, 0, 0, 0),
-              blurRadius: 5,
-              spreadRadius: 3,
-              offset: Offset(0, 10),
-            ),
-          ],
-        ),
-        child: IconButton(
-          onPressed: _addNewRecord,
-          icon: Icon(
-            Iconsax.add_circle_copy,
-            color: Theme.of(context).colorScheme.primary,
-            size: 35,
+        body: SafeArea(
+          child: IndexedStack(
+            index: selected,
+            children: [
+              _homeScreenBody(),
+              Center(child: Text("Stats")),
+              Center(child: Text("Add")),
+              CategoryScreen(),
+            ],
           ),
         ),
-      ),
-      bottomNavigationBar: Theme(
-        data: Theme.of(
-          context,
-        ).copyWith(canvasColor: Theme.of(context).colorScheme.onPrimary),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Theme.of(context).colorScheme.primary,
-          unselectedItemColor: Theme.of(context).colorScheme.onSurfaceVariant,
-          selectedIconTheme: IconThemeData(size: 30),
-          // selectedFontSize: 12,
-          onTap: (index) => setState(() => _selectedIndex = index),
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(
-                _selectedIndex == 0
-                    ? Iconsax.receipt_2_1
-                    : Iconsax.receipt_2_1_copy,
+        floatingActionButton: Container(
+          height: 60,
+          width: 60,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: const Color.fromARGB(47, 0, 0, 0),
+                blurRadius: 5,
+                spreadRadius: 3,
+                offset: Offset(0, 5),
               ),
-              label: AppConstants.records,
+            ],
+          ),
+          child: IconButton(
+            onPressed: _addNewRecord,
+            icon: Icon(
+              Iconsax.add_circle_copy,
+              color: Theme.of(context).colorScheme.onSurface,
+              size: 35,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                _selectedIndex == 1 ? Iconsax.chart_3 : Iconsax.chart_1_copy,
+          ),
+        ),
+
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).colorScheme.surface.withAlpha(50),
+                blurRadius: 5,
+                spreadRadius: 5,
+                offset: Offset(0, -2), // Shadow position
               ),
-              label: AppConstants.analysis,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                _selectedIndex == 2
-                    ? Iconsax.calculator
-                    : Iconsax.calculator_copy,
+            ],
+          ),
+          child: StylishBottomBar(
+            backgroundColor: Theme.of(context).colorScheme.onSurface,
+            fabLocation: StylishBarFabLocation.center,
+            hasNotch: true,
+            notchStyle: NotchStyle.circle,
+            currentIndex: selected,
+            onTap: (index) {
+              setState(() => selected = index);
+            },
+            option: AnimatedBarOptions(iconStyle: IconStyle.animated),
+            items: [
+              BottomBarItem(
+                icon: Icon(
+                  Iconsax.home_2_copy,
+                  color: Theme.of(context).colorScheme.surface,
+                ),
+                selectedIcon: Icon(
+                  Iconsax.home_2,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                title: Text(AppConstants.records),
+                selectedColor: Theme.of(context).colorScheme.primary,
               ),
-              label: AppConstants.budgets,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                _selectedIndex == 3 ? Iconsax.wallet : Iconsax.wallet_1_copy,
+              BottomBarItem(
+                icon: Icon(
+                  Iconsax.chart_1_copy,
+                  color: Theme.of(context).colorScheme.surface,
+                ),
+                selectedIcon: Icon(
+                  Iconsax.chart_3,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                title: Text(AppConstants.analysis),
+                selectedColor: Theme.of(context).colorScheme.primary,
               ),
-              label: AppConstants.accounts,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                _selectedIndex == 4
-                    ? Iconsax.category_2
-                    : Iconsax.category_2_copy,
+              BottomBarItem(
+                icon: Icon(
+                  Iconsax.wallet_1_copy,
+                  color: Theme.of(context).colorScheme.surface,
+                ),
+                selectedIcon: Icon(
+                  Iconsax.wallet,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                title: Text(AppConstants.accounts),
+                selectedColor: Theme.of(context).colorScheme.primary,
               ),
-              label: AppConstants.categories,
-            ),
-          ],
+              BottomBarItem(
+                icon: Icon(
+                  Iconsax.category_2_copy,
+                  color: Theme.of(context).colorScheme.surface,
+                ),
+                selectedIcon: Icon(
+                  Iconsax.category_2,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                title: Text(AppConstants.categories),
+                selectedColor: Theme.of(context).colorScheme.primary,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  SliverAppBar _recordsAnalysisAppbar() {
-    return SliverAppBar(
-      toolbarHeight: 120,
-      floating: false,
-      pinned: true,
-      backgroundColor: Theme.of(context).colorScheme.onPrimary,
-      surfaceTintColor: Colors.transparent,
-      centerTitle: false,
-      automaticallyImplyLeading: false,
-      iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
-      title: Obx(() {
-        String showTotel = recordsController.showTotal.value;
-        String income = AppConstants.amount(
-          recordsController.totalIncome.value,
-        );
-        String expense = AppConstants.amount(
-          recordsController.totalExpense.value,
-        );
-        String total = AppConstants.amount(
-          recordsController.totalBalance.value,
-        );
-        return Container(
-          padding: EdgeInsets.fromLTRB(16, 10, 16, 12),
-          width: double.infinity,
-          color: Theme.of(context).colorScheme.onPrimary,
+  Widget _homeScreenBody() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _headerSection(),
+        Expanded(child: _recordListSection()),
+      ],
+    );
+  }
+
+  Widget _headerSection() {
+    return Container(
+      height: 230,
+      color: Theme.of(context).colorScheme.onSurface,
+      child: Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            height: 170,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.elliptical(200, 30),
+                bottomRight: Radius.elliptical(200, 30),
+              ),
+            ),
+            child: Stack(
+              children: [
+                SizedBox(
+                  height: 200,
+                  width: 200,
+                  child: Image.asset(
+                    "assets/images/png_bg_rings.png",
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 10,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Iconsax.menu_1_copy,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: Text(
+                              AppConstants.myMoney,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          Icon(
+                            Icons.search,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Positioned(bottom: 20, child: _summaryCard()),
+        ],
+      ),
+    );
+  }
+
+  Widget _summaryCard() {
+    return Obx(() {
+      String showTotel = recordsController.showTotal.value;
+      String income = AppConstants.amount(recordsController.totalIncome.value);
+      String expense = AppConstants.amount(
+        recordsController.totalExpense.value,
+      );
+      String total = AppConstants.amount(recordsController.totalBalance.value);
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Container(
+          padding: const EdgeInsets.all(18),
+          width: MediaQuery.widthOf(context) - 40,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.onPrimary,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 10,
+                color: Theme.of(context).colorScheme.surface.withAlpha(80),
+                spreadRadius: 3,
+                offset: Offset(0, 15),
+              ),
+            ],
+          ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -325,20 +281,16 @@ class _HomeScreenState extends State<HomeScreen>
                           },
                           icon: Icon(
                             Iconsax.arrow_circle_left_copy,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurfaceVariant,
-                            size: 20,
+                            color: Theme.of(context).colorScheme.onSurface,
+                            size: 22,
                           ),
                         ),
 
                         Text(
                           recordsController.getFormattedHeaderDate(),
                           style: TextStyle(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurfaceVariant,
-                            fontSize: 16,
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontSize: 18,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -348,10 +300,8 @@ class _HomeScreenState extends State<HomeScreen>
                           },
                           icon: Icon(
                             Iconsax.arrow_circle_right_copy,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurfaceVariant,
-                            size: 20,
+                            color: Theme.of(context).colorScheme.onSurface,
+                            size: 22,
                           ),
                         ),
                       ],
@@ -374,245 +324,288 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                 ],
               ),
-
-              SizedBox(height: 15),
+              const SizedBox(height: 10),
 
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _recordsAnalysisAppbarItem(
-                    AppConstants.expense,
-                    expense,
-                    Theme.of(context).colorScheme.error,
+                  _summaryItem(
+                    icon: Iconsax.arrow_up_1,
+                    title: AppConstants.expense,
+                    amount: expense,
                   ),
-                  _recordsAnalysisAppbarItem(
-                    AppConstants.income,
-                    income,
-                    Theme.of(context).colorScheme.onInverseSurface,
+                  _summaryItem(
+                    icon: Iconsax.arrow_down,
+                    title: AppConstants.income,
+                    amount: income,
                   ),
-
                   if (showTotel == AppConstants.yes)
-                    _recordsAnalysisAppbarItem(
-                      AppConstants.total,
-                      total,
-                      recordsController.totalBalance.value >= 0
-                          ? Theme.of(context).colorScheme.onInverseSurface
-                          : Theme.of(context).colorScheme.error,
+                    _summaryItem(
+                      icon: Iconsax.arrow_right_2,
+                      title: AppConstants.total,
+                      amount: total,
                     ),
                 ],
               ),
             ],
           ),
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 
-  Widget _recordsAnalysisAppbarItem(String title, String amount, Color color) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
+  Widget _summaryItem({
+    required IconData icon,
+    required String title,
+    required String amount,
+  }) {
+    return Flexible(
+      flex: 1,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircleAvatar(
+                radius: 13,
+                backgroundColor: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withAlpha(50),
+                child: Icon(
+                  icon,
+                  color: Theme.of(context).colorScheme.onSurface,
+                  size: 16,
+                ),
+              ),
+              const SizedBox(width: 5),
+              Text(
+                title,
+                style: TextStyle(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSecondary.withAlpha(180),
+                  fontSize: 16,
+                ),
+              ),
+            ],
           ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          amount,
-          style: TextStyle(
-            color: color,
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
+          Text(
+            amount,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
           ),
-        ),
-      ],
-    );
-  }
-
-  SliverAppBar _budgetAppBar() {
-    return SliverAppBar(
-      toolbarHeight: 120,
-      floating: false,
-      pinned: true,
-      backgroundColor: Theme.of(context).colorScheme.onPrimary,
-      surfaceTintColor: Colors.transparent,
-      centerTitle: false,
-      automaticallyImplyLeading: false,
-      iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
-      title: Container(
-        padding: EdgeInsets.fromLTRB(16, 10, 16, 12),
-        width: double.infinity,
-        color: Theme.of(context).colorScheme.onPrimary,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Iconsax.arrow_circle_left_copy,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    size: 20,
-                  ),
-                ),
-
-                Text(
-                  "March, 2026",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Iconsax.arrow_circle_right_copy,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    size: 20,
-                  ),
-                ),
-              ],
-            ),
-
-            SizedBox(height: 15),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _budgetAppBarItem(
-                  AppConstants.totalBudget,
-                  "₹5,738.00",
-                  Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-
-                _budgetAppBarItem(
-                  AppConstants.totalSpent,
-                  "-₹5,238.00",
-                  Theme.of(context).colorScheme.error,
-                ),
-              ],
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }
 
-  Widget _budgetAppBarItem(String title, String amount, Color color) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          amount,
-          style: TextStyle(
-            color: color,
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    );
-  }
-
-  SliverAppBar _accountsCategoryAppBar() {
-    return SliverAppBar(
-      toolbarHeight: 120,
-      floating: false,
-      pinned: true,
-      backgroundColor: Theme.of(context).colorScheme.onPrimary,
-      surfaceTintColor: Colors.transparent,
-      centerTitle: false,
-      automaticallyImplyLeading: false,
-      iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
-      title: Obx(() {
-        final accountsBalanceTotal =
-            accountsController.accountBalanceTotal.value;
-        final expenseSofar = recordsController.totalExpenseSofar.value;
-        final incomeSofar = recordsController.totalIncomeSofar.value;
-        return Container(
-          padding: EdgeInsets.fromLTRB(16, 10, 16, 12),
-          width: double.infinity,
-          color: Theme.of(context).colorScheme.onPrimary,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                AppConstants.allAccounts(accountsBalanceTotal),
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 30),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _accountsCategoryAppBarItem(
-                    AppConstants.expenseSoFar,
-                    AppConstants.amount(expenseSofar),
-                    Theme.of(context).colorScheme.error,
-                  ),
-
-                  _accountsCategoryAppBarItem(
-                    AppConstants.incomeSoFar,
-                    AppConstants.amount(incomeSofar),
-                    Theme.of(context).colorScheme.onInverseSurface,
-                  ),
-                ],
-              ),
-            ],
+  Widget _recordListSection() {
+    return Obx(() {
+      final groupedRecordsKyes = recordsController.groupedRecords.keys.toList();
+      if (groupedRecordsKyes.isEmpty) {
+        return Center(
+          child: EmptystateScreen.emptyState2(
+            icon: Iconsax.receipt_add_copy,
+            title: AppConstants.emptyStateMsg,
+            context: context,
           ),
         );
-      }),
-    );
+      }
+      return ListView(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: groupedRecordsKyes.length,
+              itemBuilder: (context, index) {
+                String groupKey = groupedRecordsKyes[index];
+                List<RecordModel> records =
+                    recordsController.groupedRecords[groupKey]!;
+
+                return Container(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        groupKey,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      _recordList(records),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      );
+    });
   }
 
-  Widget _accountsCategoryAppBarItem(String title, String amount, Color color) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
+  Widget _recordList(List<RecordModel> records) {
+    return ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: records.length,
+      itemBuilder: (context, index) {
+        final record = records[index];
+        final account = recordsController.getAccById(record.accountId);
+
+        String title = "";
+        CategoryModel? category;
+        AccountModel? transferAccount;
+
+        if (record.type == AppConstants.transfer) {
+          title = AppConstants.transfer;
+          transferAccount = recordsController.getAccById(
+            record.transferAccountId!,
+          );
+        } else {
+          category = recordsController.getCatById(record.categoryId!);
+
+          title = category!.name;
+        }
+
+        return InkWell(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return RecordDetailDialog(record: record);
+              },
+            );
+          },
+          splashColor: Theme.of(
+            context,
+          ).colorScheme.onSurfaceVariant.withAlpha(50),
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    record.transferAccountId == null
+                        ? IconHelper.getIconsaxIcon(category!.icon)
+                        : Iconsax.arrow_swap_horizontal_copy,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    size: 30,
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            IconHelper.getIconsaxIcon(account!.icon),
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            size: 20,
+                          ),
+                          SizedBox(width: 5),
+
+                          Text(
+                            account.name,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.surface,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          if (transferAccount != null)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Iconsax.arrow_right_1_copy,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
+                                ),
+                                SizedBox(width: 10),
+                                Icon(
+                                  IconHelper.getIconsaxIcon(
+                                    transferAccount.icon,
+                                  ),
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
+                                  size: 20,
+                                ),
+                                SizedBox(width: 5),
+
+                                Text(
+                                  transferAccount.name,
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.surface,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  AppConstants.amount(record.amount),
+                  style: TextStyle(
+                    color: record.type == AppConstants.transfer
+                        ? Theme.of(context).colorScheme.inversePrimary
+                        : record.type == AppConstants.expense
+                        ? Theme.of(context).colorScheme.error
+                        : Theme.of(context).colorScheme.onInverseSurface,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          amount,
-          style: TextStyle(
-            color: color,
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
+        );
+      },
     );
   }
 }
@@ -622,7 +615,7 @@ class FilterDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Theme.of(context).colorScheme.onPrimary,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
         padding: EdgeInsets.all(20),
@@ -634,7 +627,7 @@ class FilterDialog extends StatelessWidget {
             Text(
               AppConstants.displayOptions,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -704,9 +697,7 @@ class FilterDialog extends StatelessWidget {
               children: [
                 Icon(
                   Iconsax.info_circle_copy,
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.onSurfaceVariant.withAlpha(150),
+                  color: Theme.of(context).colorScheme.onSurface.withAlpha(150),
                 ),
                 SizedBox(width: 5),
                 SizedBox(
@@ -718,7 +709,7 @@ class FilterDialog extends StatelessWidget {
                       fontSize: 18,
                       color: Theme.of(
                         context,
-                      ).colorScheme.onSurfaceVariant.withAlpha(120),
+                      ).colorScheme.onSurface.withAlpha(120),
                     ),
                   ),
                 ),
@@ -736,7 +727,7 @@ class FilterDialog extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: Theme.of(context).colorScheme.onSurfaceVariant,
+          color: Theme.of(context).colorScheme.onSurface,
           fontSize: 18,
           fontWeight: FontWeight.w500,
         ),
@@ -769,7 +760,7 @@ class FilterDialog extends StatelessWidget {
                   if (mode == text)
                     Icon(
                       Iconsax.tick_circle_copy,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      color: Theme.of(context).colorScheme.onSurface,
                       size: 18,
                     ),
                   SizedBox(width: 4),
@@ -778,10 +769,10 @@ class FilterDialog extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       color: mode == text
-                          ? Theme.of(context).colorScheme.onSurfaceVariant
+                          ? Theme.of(context).colorScheme.onSurface
                           : Theme.of(
                               context,
-                            ).colorScheme.onSurfaceVariant.withAlpha(120),
+                            ).colorScheme.onSurface.withAlpha(120),
                     ),
                   ),
                 ],
@@ -799,9 +790,7 @@ class FilterDialog extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.all(4.0),
         child: InkWell(
-          splashColor: Theme.of(
-            context,
-          ).colorScheme.onSurfaceVariant.withAlpha(50),
+          splashColor: Theme.of(context).colorScheme.onSurface.withAlpha(50),
           onTap: () {
             recordsController.toggleShowTotal(text);
           },
@@ -814,7 +803,7 @@ class FilterDialog extends StatelessWidget {
                   if (total == text)
                     Icon(
                       Iconsax.tick_circle_copy,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      color: Theme.of(context).colorScheme.onSurface,
                       size: 18,
                     ),
                   SizedBox(width: 4),
@@ -823,10 +812,10 @@ class FilterDialog extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       color: total == text
-                          ? Theme.of(context).colorScheme.onSurfaceVariant
+                          ? Theme.of(context).colorScheme.onSurface
                           : Theme.of(
                               context,
-                            ).colorScheme.onSurfaceVariant.withAlpha(120),
+                            ).colorScheme.onSurface.withAlpha(120),
                     ),
                   ),
                 ],
@@ -859,7 +848,7 @@ class FilterDialog extends StatelessWidget {
                   if (surplus == text)
                     Icon(
                       Iconsax.tick_circle_copy,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      color: Theme.of(context).colorScheme.onSurface,
                       size: 18,
                     ),
                   SizedBox(width: 4),
@@ -868,10 +857,10 @@ class FilterDialog extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       color: surplus == text
-                          ? Theme.of(context).colorScheme.onSurfaceVariant
+                          ? Theme.of(context).colorScheme.onSurface
                           : Theme.of(
                               context,
-                            ).colorScheme.onSurfaceVariant.withAlpha(120),
+                            ).colorScheme.onSurface.withAlpha(120),
                     ),
                   ),
                 ],
