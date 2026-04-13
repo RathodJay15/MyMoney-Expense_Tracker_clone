@@ -12,16 +12,16 @@ import 'package:mymoneyclone/data/models/accounts_model.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
 import 'package:mymoneyclone/data/models/records_model.dart';
 import 'package:mymoneyclone/presentation/old_widgets/record_detail_dialog.dart';
-import 'package:mymoneyclone/presentation/widgets/add_category.dart';
+import 'package:mymoneyclone/presentation/widgets/add_account.dart';
 import 'package:mymoneyclone/presentation/widgets/custom_appbar.dart';
 import 'package:mymoneyclone/presentation/widgets/mymoney_alertdialog.dart';
 
-class CategoryScreen extends StatefulWidget {
+class AccountScreen extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _CategoryScreenState();
+  State<StatefulWidget> createState() => _AccountScreenState();
 }
 
-class _CategoryScreenState extends State<CategoryScreen> {
+class _AccountScreenState extends State<AccountScreen> {
   AccountsController accountsController = Get.find();
   CategoryController categoryController = Get.find();
   RecordsController recordsController = Get.find();
@@ -129,8 +129,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   Widget _tabBarSection() {
     return Obx(() {
-      final income = categoryController.incomeCategories;
-      final expense = categoryController.expenseCategories;
+      final accountsList = accountsController.accounts;
       return Theme(
         data: Theme.of(context).copyWith(
           tabBarTheme: TabBarThemeData(
@@ -142,11 +141,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           tabs: [
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Text(AppConstants.incomeCategory),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(AppConstants.expenseCategory),
+              child: Text(AppConstants.accounts),
             ),
           ],
           tabBarProperties: TabBarProperties(
@@ -170,51 +165,40 @@ class _CategoryScreenState extends State<CategoryScreen> {
             labelColor: Theme.of(context).colorScheme.surface,
             unselectedLabelColor: Theme.of(context).colorScheme.surface,
           ),
-          views: [_incomeList(income), _expenseList(expense)],
+          views: [_incomeList(accountsList)],
         ),
       );
     });
   }
 
-  Widget _incomeList(List<CategoryModel> incomeCats) {
+  Widget _incomeList(List<AccountModel> accountList) {
     return ListView.builder(
       padding: EdgeInsets.only(bottom: 30),
-      itemCount: incomeCats.length,
+      itemCount: accountList.length,
       itemBuilder: (context, index) {
-        final category = incomeCats[index];
-        return _listItem(category);
+        final account = accountList[index];
+        return _listItem(account);
       },
     );
   }
 
-  Widget _expenseList(List<CategoryModel> expenseCats) {
-    return ListView.builder(
-      padding: EdgeInsets.only(bottom: 30),
-      itemCount: expenseCats.length,
-      itemBuilder: (context, index) {
-        final category = expenseCats[index];
-        return _listItem(category);
-      },
-    );
-  }
-
-  Widget _listItem(CategoryModel category) {
+  Widget _listItem(AccountModel account) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
-          splashColor: category.isIgnored
+          splashColor: account.isIgnored
               ? Colors.transparent
               : Theme.of(context).colorScheme.primary.withAlpha(50),
           onTap: () {
-            if (category.isIgnored) return;
+            if (account.isIgnored) return;
             showModalBottomSheet(
               context: context,
               isScrollControlled: true,
               useSafeArea: true,
-              builder: (context) => displayCat(category),
+              builder: (context) => displayAcc(account),
             );
           },
           child: Container(
@@ -231,9 +215,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Icon(
-                    IconHelper.getIconsaxIcon(category.icon),
+                    IconHelper.getIconsaxIcon(account.icon),
                     size: 30,
-                    color: !category.isIgnored
+                    color: !account.isIgnored
                         ? Theme.of(context).colorScheme.onPrimary
                         : Theme.of(context).colorScheme.onPrimary.withAlpha(90),
                   ),
@@ -241,14 +225,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    category.name,
+                    account.name,
                     style: TextStyle(
-                      color: !category.isIgnored
+                      color: !account.isIgnored
                           ? Theme.of(context).colorScheme.primaryContainer
                           : Theme.of(context).colorScheme.surface.withAlpha(90),
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      decoration: !category.isIgnored
+                      decoration: !account.isIgnored
                           ? null
                           : TextDecoration.lineThrough,
                       decorationColor: Theme.of(
@@ -274,9 +258,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return CategoryDialog(
+                            return AccountDialog(
                               title: AppConstants.editCat,
-                              category: category,
+                              account: account,
                             );
                           },
                         );
@@ -302,7 +286,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           content: AppConstants.deletingCatMsg,
                         );
                         if (response == true) {
-                          await categoryController.deleteCategory(category);
+                          await accountsController.deleteAccount(account);
                         }
                       },
                       child: Text(
@@ -315,7 +299,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     ),
                     PopupMenuItem(
                       onTap: () async {
-                        if (!category.isIgnored) {
+                        if (!account.isIgnored) {
                           final response =
                               await MymoneyAlertdialog.showMyDialog(
                                 context: context,
@@ -323,16 +307,16 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                 content: AppConstants.ignoreCatMsg,
                               );
                           if (response == true) {
-                            category.isIgnored = true;
-                            await categoryController.updateCategory(category);
+                            account.isIgnored = true;
+                            await accountsController.updateAccounts(account);
                           }
                         } else {
-                          category.isIgnored = false;
-                          await categoryController.updateCategory(category);
+                          account.isIgnored = false;
+                          await accountsController.updateAccounts(account);
                         }
                       },
                       child: Text(
-                        !category.isIgnored
+                        !account.isIgnored
                             ? AppConstants.ignore
                             : AppConstants.restore,
                         style: TextStyle(
@@ -351,11 +335,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 
-  Widget displayCat(CategoryModel category) {
-    final records = recordsController.fetchRecordByCategory(category.key);
+  Widget displayAcc(AccountModel account) {
+    final records = recordsController.fetchRecordByAccount(account.key);
+
     return Obx(() {
-      var orderedRecords = records[categoryController.recordOrder.value];
+      var orderedRecords = records[accountsController.recordOrder.value];
       final groupedRecordsKyes = orderedRecords!.keys.toList();
+
       return Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.onSurface,
@@ -390,7 +376,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          AppConstants.catDetails,
+                          AppConstants.accDetails,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontSize: 18,
@@ -425,9 +411,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
-                      IconHelper.getIconsaxIcon(category.icon),
-                      color: Theme.of(context).colorScheme.onPrimary,
+                      IconHelper.getIconsaxIcon(account.icon),
                       size: 30,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                   SizedBox(width: 10),
@@ -437,7 +423,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          category.name,
+                          account.name,
                           style: TextStyle(
                             color: Theme.of(
                               context,
@@ -447,15 +433,24 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           ),
                         ),
                         Text(
-                          category.type == AppConstants.expense
-                              ? AppConstants.expenseCategory
-                              : AppConstants.incomeCategory,
+                          '${AppConstants.balance} ${AppConstants.amount(account.balance)}',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.surface,
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        if (account.initialAmount != 0.00)
+                          Text(
+                            '${AppConstants.initialy} ${AppConstants.amount(account.initialAmount)}',
+                            style: TextStyle(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.surface.withAlpha(180),
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -498,7 +493,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             ),
             groupedRecordsKyes.isEmpty
                 ? Text(
-                    AppConstants.noRecordInThisCat,
+                    AppConstants.noRecordInThisAcc,
                     textAlign:
                         TextAlign.center, // Ensures multi-line text is centered
                     style: TextStyle(
@@ -509,7 +504,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   )
                 : orderedRecords.length == 1
                 ? Text(
-                    AppConstants.oneRecordInCat,
+                    AppConstants.oneRecordInAcc,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primaryContainer,
                       fontSize: 16,
@@ -523,7 +518,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          AppConstants.totalRecordsInCategory(
+                          AppConstants.totalRecordsInAccount(
                             orderedRecords.length,
                           ),
                           style: TextStyle(
@@ -537,7 +532,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            onTap: categoryController.changeRecordOrder,
+                            onTap: accountsController.changeRecordOrder,
                             borderRadius: BorderRadius.circular(8),
                             splashColor: Theme.of(
                               context,
@@ -556,7 +551,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                     size: 25,
                                   ),
                                   Text(
-                                    categoryController.recordOrder.value,
+                                    accountsController.recordOrder.value,
                                     style: TextStyle(
                                       color: Theme.of(
                                         context,
@@ -572,6 +567,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       ],
                     ),
                   ),
+
             Expanded(
               child: ListView.builder(
                 itemCount: groupedRecordsKyes.length,
@@ -582,13 +578,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   return Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      margin: EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0,
+                            ),
                             child: Text(
                               groupKey,
                               style: TextStyle(
@@ -600,7 +598,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               ),
                             ),
                           ),
-                          _recordList(records, category),
+                          _recordList(records, account),
                         ],
                       ),
                     ),
@@ -614,15 +612,23 @@ class _CategoryScreenState extends State<CategoryScreen> {
     });
   }
 
-  Widget _recordList(List<RecordModel> records, CategoryModel category) {
+  Widget _recordList(List<RecordModel> records, AccountModel account) {
     return ListView.builder(
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: records.length,
       itemBuilder: (context, index) {
         final record = records[index];
-        AccountModel? account = recordsController.getAccById(record.accountId);
+        CategoryModel? category;
+        AccountModel? transferAccount;
 
+        if (record.type == AppConstants.transfer) {
+          transferAccount = recordsController.getAccById(
+            record.transferAccountId!,
+          );
+        } else {
+          category = recordsController.getCatById(record.categoryId!);
+        }
         return Material(
           color: Colors.transparent,
           child: InkWell(
@@ -646,12 +652,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     width: 50,
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.onSecondary,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     child: Icon(
-                      IconHelper.getIconsaxIcon(account!.icon),
-                      size: 30,
+                      record.transferAccountId == null
+                          ? IconHelper.getIconsaxIcon(category!.icon)
+                          : Iconsax.arrow_swap_horizontal_copy,
                       color: Theme.of(context).colorScheme.onPrimary,
+                      size: 30,
                     ),
                   ),
                   SizedBox(width: 10),
@@ -661,36 +669,32 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        transferAccount != null
+                            ? Text(
+                                "[${account.name} > ${transferAccount.name}]",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer,
+                                ),
+                              )
+                            : Text(
+                                category!.name,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer,
+                                ),
+                              ),
+
                         Text(
-                          account.name,
+                          AppHelper.getFormattedDateString2(record.date),
                           style: TextStyle(
                             fontSize: 16,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primaryContainer,
+                            color: Theme.of(context).colorScheme.surface,
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              AppHelper.getFormattedDateString2(record.date),
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Theme.of(context).colorScheme.surface,
-                              ),
-                            ),
-                            SizedBox(width: 10),
-
-                            Text(
-                              record.time,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Theme.of(context).colorScheme.surface,
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),
@@ -706,7 +710,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       fontSize: 18,
                     ),
                   ),
-                  SizedBox(width: 5),
                 ],
               ),
             ),

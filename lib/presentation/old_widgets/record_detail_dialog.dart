@@ -9,8 +9,8 @@ import 'package:mymoneyclone/core/theme/icon_helper.dart';
 import 'package:mymoneyclone/data/models/accounts_model.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
 import 'package:mymoneyclone/data/models/records_model.dart';
-import 'package:mymoneyclone/presentation/old_UI/add_record_screen.dart';
-import 'package:mymoneyclone/presentation/widgets/mymoney_alertdialog.dart';
+import 'package:mymoneyclone/presentation/old_screens/add_record_screen.dart';
+import 'package:mymoneyclone/presentation/old_widgets/mymoney_alertdialog.dart';
 
 class RecordDetailDialog extends StatefulWidget {
   final RecordModel record;

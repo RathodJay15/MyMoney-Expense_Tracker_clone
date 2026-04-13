@@ -4,12 +4,12 @@ import 'package:mymoneyclone/controllers/accounts_controller.dart';
 import 'package:mymoneyclone/controllers/records_controller.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:mymoneyclone/presentation/old_UI/accounts_screen.dart';
-import 'package:mymoneyclone/presentation/old_UI/add_record_screen.dart';
-import 'package:mymoneyclone/presentation/old_UI/analysis_screen.dart';
-import 'package:mymoneyclone/presentation/old_UI/budget_screen.dart';
-import 'package:mymoneyclone/presentation/old_UI/categories_screen.dart';
-import 'package:mymoneyclone/presentation/old_UI/records_screen.dart';
+import 'package:mymoneyclone/presentation/old_screens/accounts_screen.dart';
+import 'package:mymoneyclone/presentation/old_screens/add_record_screen.dart';
+import 'package:mymoneyclone/presentation/old_screens/analysis_screen.dart';
+import 'package:mymoneyclone/presentation/old_screens/budget_screen.dart';
+import 'package:mymoneyclone/presentation/old_screens/categories_screen.dart';
+import 'package:mymoneyclone/presentation/old_screens/records_screen.dart';
 
 class HomeScreenOld extends StatefulWidget {
   @override

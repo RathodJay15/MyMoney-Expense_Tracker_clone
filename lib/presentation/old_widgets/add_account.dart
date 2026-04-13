@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mymoneyclone/controllers/accounts_controller.dart';
 import 'package:mymoneyclone/controllers/records_controller.dart';
+import 'package:mymoneyclone/core/constants/app_colors.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
 import 'package:mymoneyclone/core/theme/icon_helper.dart';
 import 'package:mymoneyclone/data/models/accounts_model.dart';
@@ -45,10 +46,6 @@ class _AccountDialogState extends State<AccountDialog> {
         ? IconHelper.catIcons.indexOf(widget.account!.icon)
         : 0;
     focusNode.requestFocus();
-    initialAmountController.selection = TextSelection(
-      baseOffset: 0,
-      extentOffset: initialAmountController.text.length,
-    );
     super.initState();
   }
 
@@ -61,12 +58,13 @@ class _AccountDialogState extends State<AccountDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Theme.of(context).colorScheme.onSurface,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
+    return Theme(
+      data: ThemeData(),
+      child: Dialog(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -75,7 +73,7 @@ class _AccountDialogState extends State<AccountDialog> {
               Text(
                 widget.title,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -84,93 +82,121 @@ class _AccountDialogState extends State<AccountDialog> {
               SizedBox(height: widget.title == AppConstants.addNewAcc ? 16 : 0),
 
               /// Initial Amount Field
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  AppConstants.initAmountTxt,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              SizedBox(
-                height: 50,
-                child: TextField(
-                  controller: initialAmountController,
-                  keyboardType: TextInputType.number,
-                  focusNode: focusNode,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  decoration: InputDecoration(
-                    isDense: true,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    AppConstants.initAmountTxt,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontSize: 18,
                     ),
                   ),
-                ),
+                  SizedBox(width: 5),
+                  SizedBox(
+                    width: MediaQuery.maybeWidthOf(context)! * 0.43,
+                    height: 50,
+                    child: TextField(
+                      controller: initialAmountController,
+                      keyboardType: TextInputType.number,
+                      focusNode: focusNode,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                      decoration: InputDecoration(
+                        isDense: true,
+                        filled: true,
+                        fillColor: Theme.of(context).colorScheme.onPrimary,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            width: 2,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            width: 2,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
+
+              SizedBox(height: 8),
 
               Text(
                 AppConstants.initAmountMsg,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary.withAlpha(200),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurfaceVariant.withAlpha(200),
                   fontSize: 14,
                 ),
               ),
 
+              SizedBox(height: 8),
+
               /// Name Field
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  AppConstants.name,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              SizedBox(
-                child: TextField(
-                  controller: nameController,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  decoration: InputDecoration(
-                    isDense: true,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    AppConstants.name,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontSize: 18,
                     ),
                   ),
-                ),
+                  SizedBox(width: 5),
+                  SizedBox(
+                    width: MediaQuery.maybeWidthOf(context)! * 0.59,
+                    child: TextField(
+                      controller: nameController,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Theme.of(context).colorScheme.onPrimary,
+                        isDense: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            width: 2,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            width: 2,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
 
               /// Icon Label
               Align(
@@ -178,7 +204,7 @@ class _AccountDialogState extends State<AccountDialog> {
                 child: Text(
                   AppConstants.icon,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                     fontSize: 18,
                   ),
                 ),
@@ -191,10 +217,11 @@ class _AccountDialogState extends State<AccountDialog> {
                 height: 120,
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimary,
                   borderRadius: BorderRadius.circular(12),
                   border: BoxBorder.all(
                     width: 2,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
                 child: GridView.builder(
@@ -211,18 +238,20 @@ class _AccountDialogState extends State<AccountDialog> {
                       onTap: () => setState(() => selectedIcon = index),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.onSecondary,
-                          borderRadius: BorderRadius.circular(5),
+                          color: AppColors.blueBG,
+                          shape: BoxShape.circle,
                           border: selectedIcon == index
                               ? Border.all(
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
                                   width: 2,
                                 )
                               : null,
                         ),
                         child: Icon(
                           IconHelper.getIconsaxIcon(IconHelper.catIcons[index]),
-                          color: Theme.of(context).colorScheme.onPrimary,
+                          color: Colors.white,
                           size: 25,
                         ),
                       ),
@@ -244,14 +273,14 @@ class _AccountDialogState extends State<AccountDialog> {
                         borderRadius: BorderRadius.circular(5),
                       ),
                       side: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         width: 2,
                       ),
                     ),
                     child: Text(
                       AppConstants.cancel,
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontSize: 18,
                       ),
                     ),
@@ -290,14 +319,14 @@ class _AccountDialogState extends State<AccountDialog> {
                         borderRadius: BorderRadius.circular(5),
                       ),
                       side: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         width: 2,
                       ),
                     ),
                     child: Text(
                       AppConstants.save,
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontSize: 18,
                       ),
                     ),

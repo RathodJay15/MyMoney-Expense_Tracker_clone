@@ -8,9 +8,13 @@ import 'package:mymoneyclone/core/theme/icon_helper.dart';
 import 'package:mymoneyclone/data/models/accounts_model.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
 import 'package:mymoneyclone/data/models/records_model.dart';
+import 'package:mymoneyclone/presentation/account_screen.dart';
 import 'package:mymoneyclone/presentation/category_screen.dart';
-import 'package:mymoneyclone/presentation/widgets/empty_satate.dart';
-import 'package:mymoneyclone/presentation/widgets/record_detail_dialog.dart';
+import 'package:mymoneyclone/presentation/widgets/add_account.dart';
+import 'package:mymoneyclone/presentation/widgets/add_category.dart';
+import 'package:mymoneyclone/presentation/widgets/custom_appbar.dart';
+import 'package:mymoneyclone/presentation/widgets/empty_state.dart';
+import 'package:mymoneyclone/presentation/old_widgets/record_detail_dialog.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,58 +24,73 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   RecordsController recordsController = Get.find();
-
-  void _addNewRecord() {
-    // Get.to(AddRecordScreen(oldRecord: null));
-  }
-
   int selected = 0;
+
+  void _masterAdd() {
+    if (selected == 0) {
+      // Get.to(AddRecordScreen(oldRecord: null));
+    } else if (selected == 2) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AccountDialog(title: AppConstants.addNewAcc, account: null);
+        },
+      );
+    } else if (selected == 3) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CategoryDialog(title: AppConstants.addNewCat, category: null);
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         systemNavigationBarColor: Theme.of(context).colorScheme.onSurface,
-        statusBarColor: Theme.of(context).colorScheme.primary,
+        statusBarColor: Colors.transparent,
       ),
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.onSurface,
-
-        body: SafeArea(
-          child: IndexedStack(
-            index: selected,
-            children: [
-              _homeScreenBody(),
-              Center(child: Text("Stats")),
-              Center(child: Text("Add")),
-              CategoryScreen(),
-            ],
-          ),
+        resizeToAvoidBottomInset: false,
+        body: IndexedStack(
+          index: selected,
+          children: [
+            _homeScreenBody(),
+            Center(child: Text("Stats")),
+            AccountScreen(),
+            CategoryScreen(),
+          ],
         ),
-        floatingActionButton: Container(
-          height: 60,
-          width: 60,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                color: const Color.fromARGB(47, 0, 0, 0),
-                blurRadius: 5,
-                spreadRadius: 3,
-                offset: Offset(0, 5),
+        floatingActionButton: selected == 1
+            ? null
+            : Container(
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(47, 0, 0, 0),
+                      blurRadius: 5,
+                      spreadRadius: 3,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: IconButton(
+                  onPressed: _masterAdd,
+                  icon: Icon(
+                    Iconsax.add_circle_copy,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    size: 35,
+                  ),
+                ),
               ),
-            ],
-          ),
-          child: IconButton(
-            onPressed: _addNewRecord,
-            icon: Icon(
-              Iconsax.add_circle_copy,
-              color: Theme.of(context).colorScheme.onSurface,
-              size: 35,
-            ),
-          ),
-        ),
 
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
@@ -88,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           child: StylishBottomBar(
             backgroundColor: Theme.of(context).colorScheme.onSurface,
-            fabLocation: StylishBarFabLocation.center,
+            fabLocation: selected == 1 ? null : StylishBarFabLocation.center,
             hasNotch: true,
             notchStyle: NotchStyle.circle,
             currentIndex: selected,
@@ -156,6 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         _headerSection(),
         Expanded(child: _recordListSection()),
@@ -165,72 +185,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _headerSection() {
     return Container(
-      height: 230,
+      height: 260,
       color: Theme.of(context).colorScheme.onSurface,
       child: Stack(
         children: [
-          Container(
-            width: double.infinity,
-            height: 170,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.elliptical(200, 30),
-                bottomRight: Radius.elliptical(200, 30),
-              ),
-            ),
-            child: Stack(
-              children: [
-                SizedBox(
-                  height: 200,
-                  width: 200,
-                  child: Image.asset(
-                    "assets/images/png_bg_rings.png",
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 10,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Iconsax.menu_1_copy,
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          Expanded(
-                            child: Text(
-                              AppConstants.myMoney,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                          Icon(
-                            Icons.search,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          CustomAppbar(),
           Positioned(bottom: 20, child: _summaryCard()),
         ],
       ),
@@ -412,54 +371,54 @@ class _HomeScreenState extends State<HomeScreen> {
       final groupedRecordsKyes = recordsController.groupedRecords.keys.toList();
       if (groupedRecordsKyes.isEmpty) {
         return Center(
-          child: EmptystateScreen.emptyState2(
+          child: EmptystateScreen.emptyState(
             icon: Iconsax.receipt_add_copy,
             title: AppConstants.emptyStateMsg,
             context: context,
           ),
         );
       }
-      return ListView(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: groupedRecordsKyes.length,
-              itemBuilder: (context, index) {
-                String groupKey = groupedRecordsKyes[index];
-                List<RecordModel> records =
-                    recordsController.groupedRecords[groupKey]!;
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: ListView.builder(
+          shrinkWrap: true,
+          padding: EdgeInsets.only(bottom: 30),
+          itemCount: groupedRecordsKyes.length,
+          itemBuilder: (context, index) {
+            String groupKey = groupedRecordsKyes[index];
+            List<RecordModel> records =
+                recordsController.groupedRecords[groupKey]!;
 
-                return Container(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        groupKey,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primaryContainer,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+            return Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      groupKey,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primaryContainer,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
-                      _recordList(records),
-                    ],
+                    ),
                   ),
-                );
-              },
-            ),
-          ),
-        ],
+                  _recordList(records),
+                ],
+              ),
+            );
+          },
+        ),
       );
     });
   }
 
   Widget _recordList(List<RecordModel> records) {
     return ListView.builder(
+      padding: EdgeInsets.zero,
       physics: NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemCount: records.length,
@@ -482,126 +441,130 @@ class _HomeScreenState extends State<HomeScreen> {
           title = category!.name;
         }
 
-        return InkWell(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return RecordDetailDialog(record: record);
-              },
-            );
-          },
-          splashColor: Theme.of(
-            context,
-          ).colorScheme.onSurfaceVariant.withAlpha(50),
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: 50,
-                  width: 50,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onSecondary,
-                    borderRadius: BorderRadius.circular(10),
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return RecordDetailDialog(record: record);
+                },
+              );
+            },
+            splashColor: Theme.of(context).colorScheme.onPrimary.withAlpha(50),
+            borderRadius: BorderRadius.circular(10),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      record.transferAccountId == null
+                          ? IconHelper.getIconsaxIcon(category!.icon)
+                          : Iconsax.arrow_swap_horizontal_copy,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      size: 30,
+                    ),
                   ),
-                  child: Icon(
-                    record.transferAccountId == null
-                        ? IconHelper.getIconsaxIcon(category!.icon)
-                        : Iconsax.arrow_swap_horizontal_copy,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    size: 30,
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primaryContainer,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(
-                            IconHelper.getIconsaxIcon(account!.icon),
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            size: 20,
-                          ),
-                          SizedBox(width: 5),
-
-                          Text(
-                            account.name,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.surface,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              IconHelper.getIconsaxIcon(account!.icon),
+                              color: Theme.of(context).colorScheme.onPrimary,
+                              size: 20,
                             ),
-                          ),
-                          SizedBox(width: 10),
-                          if (transferAccount != null)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Iconsax.arrow_right_1_copy,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary,
-                                ),
-                                SizedBox(width: 10),
-                                Icon(
-                                  IconHelper.getIconsaxIcon(
-                                    transferAccount.icon,
-                                  ),
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onPrimary,
-                                  size: 20,
-                                ),
-                                SizedBox(width: 5),
+                            SizedBox(width: 5),
 
-                                Text(
-                                  transferAccount.name,
-                                  style: TextStyle(
+                            Text(
+                              account.name,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.surface,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            if (transferAccount != null)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Iconsax.arrow_right_1_copy,
                                     color: Theme.of(
                                       context,
-                                    ).colorScheme.surface,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
+                                    ).colorScheme.onPrimary,
                                   ),
-                                ),
-                              ],
-                            ),
-                        ],
-                      ),
-                    ],
+                                  SizedBox(width: 10),
+                                  Icon(
+                                    IconHelper.getIconsaxIcon(
+                                      transferAccount.icon,
+                                    ),
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onPrimary,
+                                    size: 20,
+                                  ),
+                                  SizedBox(width: 5),
+
+                                  Text(
+                                    transferAccount.name,
+                                    style: TextStyle(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.surface,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Text(
-                  AppConstants.amount(record.amount),
-                  style: TextStyle(
-                    color: record.type == AppConstants.transfer
-                        ? Theme.of(context).colorScheme.inversePrimary
-                        : record.type == AppConstants.expense
-                        ? Theme.of(context).colorScheme.error
-                        : Theme.of(context).colorScheme.onInverseSurface,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  Text(
+                    AppConstants.amount(record.amount),
+                    style: TextStyle(
+                      color: record.type == AppConstants.transfer
+                          ? Theme.of(context).colorScheme.inversePrimary
+                          : record.type == AppConstants.expense
+                          ? Theme.of(context).colorScheme.error
+                          : Theme.of(context).colorScheme.onInverseSurface,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

@@ -55,6 +55,7 @@ class AppConstants {
   static const options = "Options";
   static const ignore = "Ignore";
   static const restore = "Restore";
+  static const addNewRecord = "Add new record";
   static const recordsAllTime = "Records: All time";
   static const account = "Account";
   static const category = "Category";
@@ -103,6 +104,7 @@ class AppConstants {
   static const editAcc = "EDIT ACCOUNT";
   static const initAmountVal = "0";
   static const deleteThisAcc = "Delete this account?";
+  static const noRecordInThisAcc = "No record in this account";
   static const oneRecordInAcc = "Only one record in this account";
   static const deletingAccMsg =
       "Deleting this account will also delete all records and budgets for this account. Are you sure?";

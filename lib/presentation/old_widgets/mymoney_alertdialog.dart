@@ -17,7 +17,7 @@ class MymoneyAlertdialog {
       barrierDismissible: false,
       builder: (ctx) => Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        backgroundColor: Theme.of(context).colorScheme.onSurface,
+        // backgroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
         child: Padding(
           padding: EdgeInsetsGeometry.symmetric(horizontal: 20, vertical: 16),
           child: Column(
@@ -28,7 +28,7 @@ class MymoneyAlertdialog {
               Text(
                 title,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -38,7 +38,7 @@ class MymoneyAlertdialog {
                 content,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 18,
                 ),
               ),
@@ -55,7 +55,7 @@ class MymoneyAlertdialog {
                         borderRadius: BorderRadius.circular(5),
                       ),
                       side: BorderSide(
-                        color: Theme.of(context).colorScheme.onPrimary,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         width: 2,
                       ),
                     ),
@@ -64,7 +64,7 @@ class MymoneyAlertdialog {
                       style: TextStyle(
                         color:
                             actionNColor ??
-                            Theme.of(context).colorScheme.onPrimary,
+                            Theme.of(context).colorScheme.onSurfaceVariant,
                         fontSize: 18,
                       ),
                     ),
@@ -77,7 +77,7 @@ class MymoneyAlertdialog {
                         borderRadius: BorderRadius.circular(5),
                       ),
                       side: BorderSide(
-                        color: Theme.of(context).colorScheme.onPrimary,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         width: 2,
                       ),
                     ),
@@ -86,7 +86,7 @@ class MymoneyAlertdialog {
                       style: TextStyle(
                         color:
                             actionYColor ??
-                            Theme.of(context).colorScheme.onPrimary,
+                            Theme.of(context).colorScheme.onSurfaceVariant,
                         fontSize: 18,
                       ),
                     ),
