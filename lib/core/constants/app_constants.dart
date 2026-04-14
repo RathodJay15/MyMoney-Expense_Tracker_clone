@@ -66,7 +66,7 @@ class AppConstants {
   static const daily = "DAILY";
   static const weekly = "WEEKLY";
   static const monthly = "MONTHLY";
-  static const threeMonths = "3 MONTHS \u2605";
+  static const threeMonths = "3 MONTHS \u2605"; // * code is to print star
   static const sixMonths = "6 MONTHS \u2605";
   static const yearly = "YEARLY \u2605";
   static const displayOptions = "Display Options";
@@ -77,11 +77,20 @@ class AppConstants {
   static const carryOver = "Carry over";
   static const carryOverMsg =
       "With Carry over enabled, monthly surplus will be added to the next month.";
+  static const preferences = "Preferences";
+  static const exportRecords = "Export records";
+  static const backupRestore = "Backup & Restore";
+  static const deleteReset = "Delete & Reset";
+  static const proVersion = "Pro version";
+  static const likeMyMoney = "Like MyMoney";
+  static const help = "Help";
+  static const feedback = "Feedback";
 
   //Record screen
   static const addNotes = "Add notes";
   static const selectAnAccount = "Select an account";
   static const selectACategory = "Select a category";
+  static const selectAType = "Select a type";
   static const amountCantBeZero = "Amount can not be zero";
   static const noAccountSelected = "No account seletced";
   static const noCategorySelected = "No category seletced";
@@ -90,8 +99,13 @@ class AppConstants {
       "Transfer accounts are same, choose different accounts";
   static const deleteThisRecord = "Delete this record?";
   static const areYouSure = "Are you sure?";
-  static const emptyStateMsg =
+  static const recordEmptyStateMsg =
       "No record in this month. Tap + to add new expense or income.";
+  static const searchEmptyStateMsg =
+      "Search records by notes, category name or account name";
+  static const noTypeSelected = "No type is selected";
+  static const date = "Date";
+  static const time = "Time";
 
   //Account screen
   static const addNewAcc = "ADD NEW ACCOUNT";

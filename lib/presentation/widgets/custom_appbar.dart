@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
+import 'package:mymoneyclone/presentation/search_screen.dart';
 
 class CustomAppbar extends StatelessWidget {
   @override
@@ -39,7 +41,9 @@ class CustomAppbar extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
                       icon: Icon(
                         Iconsax.menu_1_copy,
                         color: Theme.of(context).colorScheme.onSurface,
@@ -52,12 +56,18 @@ class CustomAppbar extends StatelessWidget {
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurface,
                           fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    Icon(
-                      Icons.search,
-                      color: Theme.of(context).colorScheme.onSurface,
+                    IconButton(
+                      onPressed: () {
+                        Get.to(SearchScreen());
+                      },
+                      icon: Icon(
+                        Icons.search,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                   ],
                 ),

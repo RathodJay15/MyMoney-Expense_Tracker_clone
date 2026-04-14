@@ -32,7 +32,7 @@ class _RecordsScreenState extends State<RecordsScreen> {
         return Center(
           child: EmptystateScreen.emptyState(
             icon: Iconsax.receipt_add_copy,
-            title: AppConstants.emptyStateMsg,
+            title: AppConstants.recordEmptyStateMsg,
             context: context,
           ),
         );

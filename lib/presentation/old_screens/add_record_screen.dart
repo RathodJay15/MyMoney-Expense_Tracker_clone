@@ -645,51 +645,47 @@ class _AddRecordScreenState extends State<AddRecordScreen> {
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        enteredAmount,
-                        style: TextStyle(
-                          fontSize: 65,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      enteredAmount,
+                      style: TextStyle(
+                        fontSize: 65,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          if (enteredAmount.length > 1) {
+                            enteredAmount = enteredAmount.substring(
+                              0,
+                              enteredAmount.length - 1,
+                            );
+                          } else {
+                            enteredAmount = "0";
+                          }
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(5),
+                      splashColor: Theme.of(
+                        context,
+                      ).colorScheme.onSurfaceVariant.withAlpha(10),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 25,
+                        ),
+                        child: Icon(
+                          Iconsax.tag_cross_copy,
+                          size: 30,
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            if (enteredAmount.length > 1) {
-                              enteredAmount = enteredAmount.substring(
-                                0,
-                                enteredAmount.length - 1,
-                              );
-                            } else {
-                              enteredAmount = "0";
-                            }
-                          });
-                        },
-                        borderRadius: BorderRadius.circular(5),
-                        splashColor: Theme.of(
-                          context,
-                        ).colorScheme.onSurfaceVariant.withAlpha(10),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 25,
-                          ),
-                          child: Icon(
-                            Iconsax.tag_cross_copy,
-                            size: 30,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),

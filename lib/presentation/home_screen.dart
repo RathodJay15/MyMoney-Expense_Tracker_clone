@@ -10,11 +10,12 @@ import 'package:mymoneyclone/data/models/category_model.dart';
 import 'package:mymoneyclone/data/models/records_model.dart';
 import 'package:mymoneyclone/presentation/account_screen.dart';
 import 'package:mymoneyclone/presentation/category_screen.dart';
+import 'package:mymoneyclone/presentation/add_record_screen.dart';
 import 'package:mymoneyclone/presentation/widgets/add_account.dart';
 import 'package:mymoneyclone/presentation/widgets/add_category.dart';
 import 'package:mymoneyclone/presentation/widgets/custom_appbar.dart';
 import 'package:mymoneyclone/presentation/widgets/empty_state.dart';
-import 'package:mymoneyclone/presentation/old_widgets/record_detail_dialog.dart';
+import 'package:mymoneyclone/presentation/widgets/record_detail_dialog.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,7 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _masterAdd() {
     if (selected == 0) {
-      // Get.to(AddRecordScreen(oldRecord: null));
+      Get.to(
+        AddRecordScreen(title: AppConstants.addNewRecord, oldRecord: null),
+      );
     } else if (selected == 2) {
       showDialog(
         context: context,
@@ -56,6 +59,119 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.onSurface,
         resizeToAvoidBottomInset: false,
+        drawer: Drawer(
+          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+          child: ListView(
+            children: [
+              ListTile(
+                title: Text(
+                  AppConstants.myMoney,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Iconsax.setting_2_copy,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                title: Text(
+                  AppConstants.preferences,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Iconsax.document_download_copy,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                title: Text(
+                  AppConstants.exportRecords,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Iconsax.save_2_copy,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                title: Text(
+                  AppConstants.backupRestore,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Iconsax.trash_copy,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                title: Text(
+                  AppConstants.deleteReset,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Iconsax.star_copy,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+                title: Text(
+                  AppConstants.proVersion,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Iconsax.like_1_copy,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                title: Text(
+                  AppConstants.likeMyMoney,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Iconsax.info_circle_copy,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                title: Text(
+                  AppConstants.help,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Iconsax.send_2_copy,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                title: Text(
+                  AppConstants.feedback,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
         body: IndexedStack(
           index: selected,
           children: [
@@ -190,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Stack(
         children: [
           CustomAppbar(),
-          Positioned(bottom: 20, child: _summaryCard()),
+          Positioned(bottom: 24, child: _summaryCard()),
         ],
       ),
     );
@@ -373,7 +489,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return Center(
           child: EmptystateScreen.emptyState(
             icon: Iconsax.receipt_add_copy,
-            title: AppConstants.emptyStateMsg,
+            title: AppConstants.recordEmptyStateMsg,
             context: context,
           ),
         );

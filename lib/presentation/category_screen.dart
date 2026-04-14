@@ -11,7 +11,7 @@ import 'package:mymoneyclone/core/theme/icon_helper.dart';
 import 'package:mymoneyclone/data/models/accounts_model.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
 import 'package:mymoneyclone/data/models/records_model.dart';
-import 'package:mymoneyclone/presentation/old_widgets/record_detail_dialog.dart';
+import 'package:mymoneyclone/presentation/widgets/record_detail_dialog.dart';
 import 'package:mymoneyclone/presentation/widgets/add_category.dart';
 import 'package:mymoneyclone/presentation/widgets/custom_appbar.dart';
 import 'package:mymoneyclone/presentation/widgets/mymoney_alertdialog.dart';

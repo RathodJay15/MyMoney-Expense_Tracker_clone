@@ -21,6 +21,7 @@ class RecordsController extends GetxController {
 
   var _allRecords = <RecordModel>[];
   var filtredRecords = <RecordModel>[].obs;
+  var searchResultRecords = <RecordModel>[].obs;
   var groupedRecords = <String, List<RecordModel>>{}.obs;
 
   var types = <TypeModel>[].obs;
@@ -54,6 +55,7 @@ class RecordsController extends GetxController {
   void changeMode(String mode) {
     selectedMode.value = mode;
     _groupRecords();
+    fetchTypes();
   }
 
   void toggleShowTotal(String mode) {
