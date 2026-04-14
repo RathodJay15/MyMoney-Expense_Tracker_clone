@@ -79,7 +79,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                       Text(
                         '${AppConstants.type}:',
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
+                          color: Theme.of(context).colorScheme.primaryContainer,
                           fontSize: 18,
                         ),
                       ),
@@ -102,7 +102,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                                     Iconsax.tick_circle_copy,
                                     color: Theme.of(
                                       context,
-                                    ).colorScheme.primary,
+                                    ).colorScheme.onPrimary,
                                     size: 16,
                                   ),
                                 SizedBox(width: 4),
@@ -113,7 +113,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                                         ? Theme.of(
                                             context,
                                           ).colorScheme.onPrimary
-                                        : Theme.of(context).colorScheme.primary,
+                                        : Theme.of(context).colorScheme.surface,
                                   ),
                                 ),
                               ],
@@ -138,7 +138,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                                     Iconsax.tick_circle_copy,
                                     color: Theme.of(
                                       context,
-                                    ).colorScheme.primary,
+                                    ).colorScheme.onPrimary,
                                     size: 16,
                                   ),
                                 SizedBox(width: 4),
@@ -149,7 +149,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                                         ? Theme.of(
                                             context,
                                           ).colorScheme.onPrimary
-                                        : Theme.of(context).colorScheme.primary,
+                                        : Theme.of(context).colorScheme.surface,
                                   ),
                                 ),
                               ],
@@ -169,7 +169,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
               child: Text(
                 AppConstants.name,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: Theme.of(context).colorScheme.primaryContainer,
                   fontSize: 18,
                 ),
               ),
@@ -180,14 +180,14 @@ class _CategoryDialogState extends State<CategoryDialog> {
               child: TextField(
                 controller: nameController,
                 focusNode: focusNode,
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                style: TextStyle(color: Theme.of(context).colorScheme.surface),
                 decoration: InputDecoration(
                   isDense: true,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(
                       width: 2,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.surface,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -209,7 +209,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
               child: Text(
                 AppConstants.icon,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: Theme.of(context).colorScheme.primaryContainer,
                   fontSize: 18,
                 ),
               ),
@@ -225,7 +225,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                 borderRadius: BorderRadius.circular(12),
                 border: BoxBorder.all(
                   width: 2,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.surface,
                 ),
               ),
               child: GridView.builder(
@@ -271,18 +271,19 @@ class _CategoryDialogState extends State<CategoryDialog> {
                 OutlinedButton(
                   onPressed: () => Get.back(),
                   style: OutlinedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                     ),
                     side: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       width: 2,
                     ),
                   ),
                   child: Text(
                     AppConstants.cancel,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.onSurface,
                       fontSize: 18,
                     ),
                   ),
@@ -314,18 +315,19 @@ class _CategoryDialogState extends State<CategoryDialog> {
                     Get.back();
                   },
                   style: OutlinedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                     ),
                     side: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.onPrimary,
                       width: 2,
                     ),
                   ),
                   child: Text(
                     AppConstants.save,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.onSurface,
                       fontSize: 18,
                     ),
                   ),

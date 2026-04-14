@@ -89,7 +89,7 @@ class _AccountDialogState extends State<AccountDialog> {
                 child: Text(
                   AppConstants.initAmountTxt,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Theme.of(context).colorScheme.primaryContainer,
                     fontSize: 18,
                   ),
                 ),
@@ -102,7 +102,7 @@ class _AccountDialogState extends State<AccountDialog> {
                   keyboardType: TextInputType.number,
                   focusNode: focusNode,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.surface,
                   ),
                   decoration: InputDecoration(
                     isDense: true,
@@ -110,7 +110,7 @@ class _AccountDialogState extends State<AccountDialog> {
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
                         width: 2,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.surface,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -127,7 +127,7 @@ class _AccountDialogState extends State<AccountDialog> {
               Text(
                 AppConstants.initAmountMsg,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary.withAlpha(200),
+                  color: Theme.of(context).colorScheme.surface.withAlpha(200),
                   fontSize: 14,
                 ),
               ),
@@ -138,7 +138,7 @@ class _AccountDialogState extends State<AccountDialog> {
                 child: Text(
                   AppConstants.name,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Theme.of(context).colorScheme.primaryContainer,
                     fontSize: 18,
                   ),
                 ),
@@ -148,7 +148,7 @@ class _AccountDialogState extends State<AccountDialog> {
                 child: TextField(
                   controller: nameController,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.surface,
                   ),
                   decoration: InputDecoration(
                     isDense: true,
@@ -156,7 +156,7 @@ class _AccountDialogState extends State<AccountDialog> {
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
                         width: 2,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.surface,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -178,7 +178,7 @@ class _AccountDialogState extends State<AccountDialog> {
                 child: Text(
                   AppConstants.icon,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Theme.of(context).colorScheme.primaryContainer,
                     fontSize: 18,
                   ),
                 ),
@@ -194,7 +194,7 @@ class _AccountDialogState extends State<AccountDialog> {
                   borderRadius: BorderRadius.circular(12),
                   border: BoxBorder.all(
                     width: 2,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.surface,
                   ),
                 ),
                 child: GridView.builder(
@@ -240,18 +240,19 @@ class _AccountDialogState extends State<AccountDialog> {
                   OutlinedButton(
                     onPressed: () => Get.back(),
                     style: OutlinedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
                       side: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         width: 2,
                       ),
                     ),
                     child: Text(
                       AppConstants.cancel,
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.onSurface,
                         fontSize: 18,
                       ),
                     ),
@@ -286,18 +287,19 @@ class _AccountDialogState extends State<AccountDialog> {
                       Get.back();
                     },
                     style: OutlinedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
                       side: BorderSide(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         width: 2,
                       ),
                     ),
                     child: Text(
                       AppConstants.save,
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.onSurface,
                         fontSize: 18,
                       ),
                     ),
