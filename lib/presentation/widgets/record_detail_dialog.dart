@@ -8,7 +8,7 @@ import 'package:mymoneyclone/core/theme/icon_helper.dart';
 import 'package:mymoneyclone/data/models/accounts_model.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
 import 'package:mymoneyclone/data/models/records_model.dart';
-import 'package:mymoneyclone/presentation/old_screens/add_record_screen.dart';
+import 'package:mymoneyclone/presentation/add_record_screen.dart';
 import 'package:mymoneyclone/presentation/widgets/mymoney_alertdialog.dart';
 
 class RecordDetailDialog extends StatefulWidget {
@@ -87,7 +87,12 @@ class _RecordDetailDialogState extends State<RecordDetailDialog> {
                     IconButton(
                       onPressed: () {
                         Get.back();
-                        Get.to(AddRecordScreen(oldRecord: widget.record));
+                        Get.to(
+                          AddRecordScreen(
+                            oldRecord: widget.record,
+                            title: AppConstants.updateRecord,
+                          ),
+                        );
                       },
                       color: Theme.of(context).colorScheme.onSurface,
                       icon: Icon(Iconsax.edit_2_copy, size: 30),

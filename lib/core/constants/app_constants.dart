@@ -88,6 +88,7 @@ class AppConstants {
 
   //Record screen
   static const addNotes = "Add notes";
+  static const updateRecord = "Update record";
   static const selectAnAccount = "Select an account";
   static const selectACategory = "Select a category";
   static const selectAType = "Select a type";
