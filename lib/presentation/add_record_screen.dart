@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -438,6 +440,7 @@ class AddRecordScreenState extends State<AddRecordScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               e.runtimeType == TypeModel
                   ? SizedBox()
@@ -446,13 +449,17 @@ class AddRecordScreenState extends State<AddRecordScreen> {
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
               SizedBox(width: 5),
-              Text(
-                e.name,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
+              SizedBox(
+                width: 180,
+                child: Text(
+                  e.name,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
-              SizedBox(width: 30),
+              // SizedBox(width: 30),
               e.runtimeType == AccountModel
                   ? Text(
                       AppConstants.amount(e.balance),
@@ -607,142 +614,128 @@ class AddRecordScreenState extends State<AddRecordScreen> {
   Widget _calculatorSection() {
     return SafeArea(
       child: Container(
+        padding: EdgeInsets.all(10),
         width: MediaQuery.widthOf(context),
         color: Theme.of(context).colorScheme.onSecondary,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Container(
-                height: 90,
-                padding: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Theme.of(context).colorScheme.onSurface,
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.surface,
-                    width: 2,
-                  ),
+            Container(
+              height: 90,
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Theme.of(context).colorScheme.onSurface,
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.surface,
+                  width: 2,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        operator,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text(
+                      operator,
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        enteredAmount,
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 55,
                           color: Theme.of(context).colorScheme.surface,
                         ),
                       ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          enteredAmount,
-                          style: TextStyle(
-                            fontSize: 55,
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            if (enteredAmount.length > 1) {
+                              enteredAmount = enteredAmount.substring(
+                                0,
+                                enteredAmount.length - 1,
+                              );
+                            } else {
+                              enteredAmount = "0";
+                            }
+                          });
+                        },
+                        borderRadius: BorderRadius.circular(5),
+                        splashColor: Theme.of(
+                          context,
+                        ).colorScheme.primary.withAlpha(10),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 25,
+                          ),
+                          child: Icon(
+                            Iconsax.tag_cross_copy,
+                            size: 30,
                             color: Theme.of(context).colorScheme.surface,
                           ),
                         ),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              if (enteredAmount.length > 1) {
-                                enteredAmount = enteredAmount.substring(
-                                  0,
-                                  enteredAmount.length - 1,
-                                );
-                              } else {
-                                enteredAmount = "0";
-                              }
-                            });
-                          },
-                          borderRadius: BorderRadius.circular(5),
-                          splashColor: Theme.of(
-                            context,
-                          ).colorScheme.primary.withAlpha(10),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 25,
-                            ),
-                            child: Icon(
-                              Iconsax.tag_cross_copy,
-                              size: 30,
-                              color: Theme.of(context).colorScheme.surface,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 5),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _calcButton(isSign: true, value: "+"),
-                  _calcButton(isSign: false, value: "7"),
-                  _calcButton(isSign: false, value: "8"),
-                  _calcButton(isSign: false, value: "9"),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
             SizedBox(height: 5),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _calcButton(isSign: true, value: "-"),
-                  _calcButton(isSign: false, value: "4"),
-                  _calcButton(isSign: false, value: "5"),
-                  _calcButton(isSign: false, value: "6"),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _calcButton(isSign: true, value: "+"),
+                _calcButton(isSign: false, value: "7"),
+                _calcButton(isSign: false, value: "8"),
+                _calcButton(isSign: false, value: "9"),
+              ],
             ),
             SizedBox(height: 5),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _calcButton(isSign: true, value: "×"),
-                  _calcButton(isSign: false, value: "1"),
-                  _calcButton(isSign: false, value: "2"),
-                  _calcButton(isSign: false, value: "3"),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _calcButton(isSign: true, value: "-"),
+                _calcButton(isSign: false, value: "4"),
+                _calcButton(isSign: false, value: "5"),
+                _calcButton(isSign: false, value: "6"),
+              ],
             ),
             SizedBox(height: 5),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _calcButton(isSign: true, value: "÷"),
-                  _calcButton(isSign: false, value: "0"),
-                  _calcButton(isSign: false, value: "."),
-                  _calcButton(isSign: true, value: "="),
-                ],
-              ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _calcButton(isSign: true, value: "×"),
+                _calcButton(isSign: false, value: "1"),
+                _calcButton(isSign: false, value: "2"),
+                _calcButton(isSign: false, value: "3"),
+              ],
+            ),
+            SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _calcButton(isSign: true, value: "÷"),
+                _calcButton(isSign: false, value: "0"),
+                _calcButton(isSign: false, value: "."),
+                _calcButton(isSign: true, value: "="),
+              ],
             ),
           ],
         ),

@@ -102,11 +102,14 @@ class AppConstants {
   static const areYouSure = "Are you sure?";
   static const recordEmptyStateMsg =
       "No record in this month. Tap + to add new expense or income.";
-  static const searchEmptyStateMsg =
-      "Search records by notes, category name or account name";
   static const noTypeSelected = "No type is selected";
   static const date = "Date";
   static const time = "Time";
+
+  // Search Screen
+  static const searchEmptyStateMsg =
+      "Search records by notes, category name or account name";
+  static const searchForRecords = "Search for records";
 
   //Account screen
   static const addNewAcc = "ADD NEW ACCOUNT";

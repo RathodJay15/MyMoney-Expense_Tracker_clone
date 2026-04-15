@@ -244,18 +244,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: Text(AppConstants.records),
                 selectedColor: Theme.of(context).colorScheme.primary,
               ),
+
               BottomBarItem(
                 icon: Icon(
-                  Iconsax.chart_1_copy,
+                  Iconsax.calculator_copy,
                   color: Theme.of(context).colorScheme.surface,
                 ),
                 selectedIcon: Icon(
-                  Iconsax.chart_3,
+                  Iconsax.calculator,
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 title: Text(AppConstants.analysis),
                 selectedColor: Theme.of(context).colorScheme.primary,
               ),
+
               BottomBarItem(
                 icon: Icon(
                   Iconsax.wallet_1_copy,
@@ -268,6 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: Text(AppConstants.accounts),
                 selectedColor: Theme.of(context).colorScheme.primary,
               ),
+
               BottomBarItem(
                 icon: Icon(
                   Iconsax.category_2_copy,

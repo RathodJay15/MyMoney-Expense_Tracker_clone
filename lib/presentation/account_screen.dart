@@ -28,8 +28,8 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: double.infinity,
-      width: double.infinity,
+      height: MediaQuery.heightOf(context),
+      width: MediaQuery.widthOf(context),
       color: Theme.of(context).colorScheme.onSurface,
       child: Stack(
         children: [

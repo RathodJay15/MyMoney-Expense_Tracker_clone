@@ -213,6 +213,46 @@ class RecordsController extends GetxController {
     totalExpenseSofar.value = expense;
   }
 
+  // ==================== Search =========================
+
+  void searchRecords(String query) {
+    if (query.trim().isEmpty) {
+      searchResultRecords.clear();
+      return;
+    }
+
+    final lowerQuery = query.toLowerCase();
+
+    final results = _allRecords.where((record) {
+      final account = getAccById(record.accountId);
+      final category = record.categoryId != null
+          ? getCatById(record.categoryId!)
+          : null;
+      final transferAccount = record.transferAccountId != null
+          ? getAccById(record.transferAccountId!)
+          : null;
+
+      // Convert all fields to searchable strings
+      final accountName = account?.name.toLowerCase() ?? "";
+      final categoryName = category?.name.toLowerCase() ?? "";
+      final transferAccName = transferAccount?.name.toLowerCase() ?? "";
+      final note = record.note?.toLowerCase() ?? "";
+      final amount = record.amount.toString(); // no lowercase needed
+
+      return accountName.contains(lowerQuery) ||
+          categoryName.contains(lowerQuery) ||
+          transferAccName.contains(lowerQuery) ||
+          note.contains(lowerQuery) ||
+          amount.contains(lowerQuery);
+    }).toList();
+
+    searchResultRecords.value = results;
+  }
+
+  void clearSearch() {
+    searchResultRecords.clear();
+  }
+
   void updateAccountBalance(int id) async {
     double balance = 0.0;
 
