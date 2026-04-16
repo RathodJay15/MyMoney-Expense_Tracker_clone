@@ -33,12 +33,12 @@ class MymoneyAlertdialog {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 15),
               Text(
                 content,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.surface,
                   fontSize: 18,
                 ),
               ),
@@ -51,6 +51,7 @@ class MymoneyAlertdialog {
                   OutlinedButton(
                     onPressed: () => Get.back(result: false),
                     style: OutlinedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
@@ -64,7 +65,7 @@ class MymoneyAlertdialog {
                       style: TextStyle(
                         color:
                             actionNColor ??
-                            Theme.of(context).colorScheme.onPrimary,
+                            Theme.of(context).colorScheme.onSurface,
                         fontSize: 18,
                       ),
                     ),
@@ -73,6 +74,7 @@ class MymoneyAlertdialog {
                   OutlinedButton(
                     onPressed: () => Get.back(result: true),
                     style: OutlinedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
@@ -86,7 +88,7 @@ class MymoneyAlertdialog {
                       style: TextStyle(
                         color:
                             actionYColor ??
-                            Theme.of(context).colorScheme.onPrimary,
+                            Theme.of(context).colorScheme.onSurface,
                         fontSize: 18,
                       ),
                     ),

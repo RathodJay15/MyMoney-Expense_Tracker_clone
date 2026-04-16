@@ -15,5 +15,80 @@ class MyMoneyTheme {
       error: Color.fromARGB(255, 209, 0, 0), // Red
       inversePrimary: Color.fromARGB(255, 13, 50, 255),
     ),
+    datePickerTheme: DatePickerThemeData(
+      backgroundColor: Colors.white, // dialog bg
+      rangePickerHeaderForegroundColor: Colors.black,
+
+      headerBackgroundColor: Color.fromARGB(255, 66, 150, 144), // primary
+      headerForegroundColor: Colors.white,
+
+      dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return Colors.white;
+        }
+        return Colors.black;
+      }),
+
+      dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return Color.fromARGB(255, 66, 150, 144); // selected day
+        }
+        return Colors.transparent;
+      }),
+
+      todayForegroundColor: WidgetStateProperty.all(
+        Color.fromARGB(255, 66, 150, 144),
+      ),
+
+      todayBackgroundColor: WidgetStateProperty.all(Colors.transparent),
+
+      weekdayStyle: TextStyle(
+        color: Color.fromARGB(255, 0, 0, 0),
+        fontWeight: FontWeight.bold,
+      ),
+
+      yearForegroundColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return Colors.black;
+        }
+        return Color.fromARGB(255, 0, 0, 0); // visible text
+      }),
+
+      yearBackgroundColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return Color.fromARGB(255, 66, 150, 144); // your primary
+        }
+        return Colors.transparent;
+      }),
+
+      dividerColor: Colors.grey,
+
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    ),
+
+    timePickerTheme: TimePickerThemeData(
+      backgroundColor: Colors.white,
+
+      hourMinuteColor: Color.fromARGB(255, 66, 150, 144),
+      hourMinuteTextColor: Colors.white,
+
+      dayPeriodColor: Color.fromARGB(255, 66, 150, 144),
+      dayPeriodTextColor: Colors.white,
+
+      dialBackgroundColor: Color.fromARGB(255, 224, 228, 228),
+      dialHandColor: Color.fromARGB(255, 66, 150, 144),
+      dialTextColor: Colors.white,
+
+      entryModeIconColor: Colors.black,
+
+      confirmButtonStyle: TextButton.styleFrom(
+        foregroundColor: Color.fromARGB(255, 66, 150, 144),
+      ),
+      cancelButtonStyle: TextButton.styleFrom(
+        foregroundColor: Color.fromARGB(255, 66, 150, 144),
+      ),
+
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    ),
   );
 }

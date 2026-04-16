@@ -11,6 +11,7 @@ import 'package:mymoneyclone/data/models/records_model.dart';
 import 'package:mymoneyclone/presentation/account_screen.dart';
 import 'package:mymoneyclone/presentation/category_screen.dart';
 import 'package:mymoneyclone/presentation/add_record_screen.dart';
+import 'package:mymoneyclone/presentation/budget_screen.dart';
 import 'package:mymoneyclone/presentation/widgets/add_account.dart';
 import 'package:mymoneyclone/presentation/widgets/add_category.dart';
 import 'package:mymoneyclone/presentation/widgets/custom_appbar.dart';
@@ -176,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
           index: selected,
           children: [
             _homeScreenBody(),
-            Center(child: Text("Stats")),
+            BudgetScreen(),
             AccountScreen(),
             CategoryScreen(),
           ],
@@ -254,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Iconsax.calculator,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                title: Text(AppConstants.analysis),
+                title: Text(AppConstants.budgets),
                 selectedColor: Theme.of(context).colorScheme.primary,
               ),
 
@@ -326,6 +327,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Container(
+          height: 145,
           padding: const EdgeInsets.all(18),
           width: MediaQuery.widthOf(context) - 40,
           decoration: BoxDecoration(
@@ -364,12 +366,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
 
-                        Text(
-                          recordsController.getFormattedHeaderDate(),
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
+                        SizedBox(
+                          width: 150,
+                          child: Text(
+                            recordsController.getFormattedHeaderDate(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                         IconButton(

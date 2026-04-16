@@ -19,7 +19,7 @@ class BudgetModelAdapter extends TypeAdapter<BudgetModel> {
     return BudgetModel(
       categoryId: fields[1] as int,
       expenceLimit: fields[2] as double,
-      id: fields[0] as int,
+      id: fields[0] as int?,
       month: fields[3] as DateTime,
     );
   }

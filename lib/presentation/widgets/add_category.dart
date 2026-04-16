@@ -58,6 +58,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             /// Title
@@ -302,6 +303,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                           name: nameController.text.trim(),
                           icon: IconHelper.catIcons[selectedIcon],
                           isIgnored: false,
+                          isBudgeted: false,
                         ),
                       );
                     } else {

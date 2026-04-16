@@ -19,11 +19,15 @@ class CategoryModel extends HiveObject {
   @HiveField(4)
   bool isIgnored;
 
+  @HiveField(5)
+  bool isBudgeted;
+
   CategoryModel({
     this.categoryId,
     required this.type,
     required this.name,
     required this.icon,
     required this.isIgnored,
+    required this.isBudgeted,
   });
 }

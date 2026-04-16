@@ -22,13 +22,14 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
       name: fields[2] as String,
       icon: fields[3] as String,
       isIgnored: fields[4] as bool,
+      isBudgeted: fields[5] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, CategoryModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.categoryId)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
       ..writeByte(3)
       ..write(obj.icon)
       ..writeByte(4)
-      ..write(obj.isIgnored);
+      ..write(obj.isIgnored)
+      ..writeByte(5)
+      ..write(obj.isBudgeted);
   }
 
   @override

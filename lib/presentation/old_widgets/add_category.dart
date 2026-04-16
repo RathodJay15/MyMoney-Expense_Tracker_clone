@@ -324,6 +324,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                             name: nameController.text.trim(),
                             icon: IconHelper.catIcons[selectedIcon],
                             isIgnored: false,
+                            isBudgeted: false,
                           ),
                         );
                       } else {

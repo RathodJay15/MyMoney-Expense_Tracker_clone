@@ -81,4 +81,8 @@ class CategoryController extends GetxController {
         ? AppConstants.oldToNew
         : AppConstants.newToOld;
   }
+
+  CategoryModel? getCatById(int id) {
+    return _service.getCatById(id);
+  }
 }

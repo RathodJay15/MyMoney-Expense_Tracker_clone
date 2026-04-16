@@ -111,6 +111,23 @@ class AppConstants {
       "Search records by notes, category name or account name";
   static const searchForRecords = "Search for records";
 
+  //Budget Screen
+  static const budgetedCats = "Budgeted categories:";
+  static const notBudgeted = "Not budgeted";
+  static const setBudget = "SET BUDGET";
+  static const limit = "Limit:";
+  static const spent = "Spent";
+  static const remaining = "Remaining";
+  static const changeLimit = "Change limit";
+  static const removeBudget = "Remove budget";
+  static const noLimitAdded = "No limit added";
+  static const removeThisBudget = "Remove this budget?";
+  static const set = "SET";
+  static const removeBudgetMsg =
+      "Budget over this category will be removed for this month, are you sure?";
+  static const noBudgetMsg =
+      "Currently, no Budget is applied for this month.\nSet budget-limits for this month, or copy your budget-liimits from past months.";
+
   //Account screen
   static const addNewAcc = "ADD NEW ACCOUNT";
   static const balance = "Balance:";

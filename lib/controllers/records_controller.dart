@@ -162,7 +162,7 @@ class RecordsController extends GetxController {
 
       case AppConstants.monthly:
       default:
-        return DateFormat('MMMM yyyy').format(date);
+        return DateFormat('MMMM, yyyy').format(date);
     }
   }
 
@@ -421,5 +421,26 @@ class RecordsController extends GetxController {
 
   AccountModel? getAccById(int id) {
     return _accountsHiveService.getAccById(id);
+  }
+
+  double getCatSpentTotal(DateTime date, int catId) {
+    final month = date.month;
+    final year = date.year;
+
+    final spentList = _allRecords.map((e) {
+      if (e.categoryId != null) {
+        if (e.categoryId == catId &&
+            e.date.month == month &&
+            e.date.year == year) {
+          return e.amount;
+        } else {
+          return 0.0;
+        }
+      } else {
+        return 0.0;
+      }
+    }).toList();
+
+    return spentList.reduce((value, element) => element + value);
   }
 }
