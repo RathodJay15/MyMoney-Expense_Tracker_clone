@@ -50,7 +50,7 @@ class MainApp extends StatelessWidget {
       theme: MyMoneyTheme.lightTheme,
       themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
-      home: Scaffold(body: HomeScreen()),
+      home: Scaffold(resizeToAvoidBottomInset: false, body: HomeScreen()),
     );
   }
 }

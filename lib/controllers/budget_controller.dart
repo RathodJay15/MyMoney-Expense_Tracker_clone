@@ -11,8 +11,11 @@ class BudgetController extends GetxController {
 
   RxList<BudgetModel> budgets = <BudgetModel>[].obs;
   RxList<BudgetModel> budgetsFliteredByMonth = <BudgetModel>[].obs;
+  RxList<BudgetModel> oldBudgetsFliteredByMonth = <BudgetModel>[].obs;
 
   var budgetMonth = DateTime.now().obs;
+
+  var oldMonth = DateTime.now().obs;
 
   // ================= INIT =================
 
@@ -20,6 +23,10 @@ class BudgetController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    _updateOldMonth();
+    ever(budgetMonth, (_) {
+      _updateOldMonth();
+    });
     fetchBudgets();
   }
 
@@ -28,16 +35,15 @@ class BudgetController extends GetxController {
   Future<void> fetchBudgets() async {
     try {
       budgets.value = await _service.getAll();
-      filterBudgetsByMonth();
+      budgetsFliteredByMonth.value = filterBudgetsByMonth(budgetMonth.value);
     } catch (e) {
       print("Budget fetch error: $e");
     }
   }
 
-  void filterBudgetsByMonth() {
-    final m = budgetMonth.value;
-    budgetsFliteredByMonth.value = budgets.where((e) {
-      return e.month.year == m.year && e.month.month == m.month;
+  List<BudgetModel> filterBudgetsByMonth(DateTime month) {
+    return budgets.where((e) {
+      return e.month.year == month.year && e.month.month == month.month;
     }).toList();
   }
 
@@ -66,7 +72,7 @@ class BudgetController extends GetxController {
     final d = budgetMonth.value;
 
     budgetMonth.value = DateTime(d.year, d.month + 1);
-    filterBudgetsByMonth();
+    budgetsFliteredByMonth.value = filterBudgetsByMonth(budgetMonth.value);
   }
 
   String getFormattedHeaderDate() {
@@ -79,7 +85,7 @@ class BudgetController extends GetxController {
     final d = budgetMonth.value;
 
     budgetMonth.value = DateTime(d.year, d.month - 1);
-    filterBudgetsByMonth();
+    budgetsFliteredByMonth.value = filterBudgetsByMonth(budgetMonth.value);
   }
 
   double getTotalBudget() {
@@ -98,5 +104,73 @@ class BudgetController extends GetxController {
     }
 
     return total;
+  }
+
+  // ======================== Copy Budget Methods =============================
+  void nextPeriodOld() {
+    final d = oldMonth.value;
+
+    oldMonth.value = DateTime(d.year, d.month + 1);
+    oldBudgetsFliteredByMonth.value = filterBudgetsByMonth(oldMonth.value);
+  }
+
+  String getFormattedOldHeaderDate() {
+    final date = oldMonth.value;
+
+    return DateFormat('MMMM, yyyy').format(date);
+  }
+
+  void previousPeriodOld() {
+    final d = oldMonth.value;
+
+    oldMonth.value = DateTime(d.year, d.month - 1);
+    oldBudgetsFliteredByMonth.value = filterBudgetsByMonth(oldMonth.value);
+  }
+
+  void _updateOldMonth() {
+    final d = budgetMonth.value;
+
+    oldMonth.value = DateTime(d.year, d.month - 1);
+    oldBudgetsFliteredByMonth.value = filterBudgetsByMonth(oldMonth.value);
+  }
+
+  bool canGoNextOldMonth() {
+    final current = oldMonth.value;
+    final limit = DateTime(budgetMonth.value.year, budgetMonth.value.month - 1);
+
+    return current.isBefore(limit);
+  }
+
+  Future<void> copyBudgetsFromOldToCurrent() async {
+    final sourceMonth = oldMonth.value;
+    final targetMonth = budgetMonth.value;
+
+    // source budgets (old month)
+    final sourceBudgets = filterBudgetsByMonth(sourceMonth);
+
+    // target budgets (current month)
+    final targetBudgets = filterBudgetsByMonth(targetMonth);
+
+    final targetMap = {for (var b in targetBudgets) b.categoryId: b};
+
+    for (var source in sourceBudgets) {
+      if (targetMap.containsKey(source.categoryId)) {
+        final existing = targetMap[source.categoryId]!;
+
+        existing.expenceLimit = source.expenceLimit;
+        await _service.update(existing);
+      } else {
+        // ➕ add new
+        final newBudget = BudgetModel(
+          categoryId: source.categoryId,
+          expenceLimit: source.expenceLimit,
+          month: DateTime(targetMonth.year, targetMonth.month),
+        );
+
+        await _service.add(newBudget);
+      }
+    }
+
+    await fetchBudgets();
   }
 }

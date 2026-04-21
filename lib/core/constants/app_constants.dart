@@ -77,6 +77,8 @@ class AppConstants {
   static const carryOver = "Carry over";
   static const carryOverMsg =
       "With Carry over enabled, monthly surplus will be added to the next month.";
+  static const selectMonthMsg =
+      "Select a pravious month you want to copy from:";
   static const preferences = "Preferences";
   static const exportRecords = "Export records";
   static const backupRestore = "Backup & Restore";
@@ -85,6 +87,10 @@ class AppConstants {
   static const likeMyMoney = "Like MyMoney";
   static const help = "Help";
   static const feedback = "Feedback";
+  static const copyBudget = "Copy budget";
+  static const month = "Month:";
+  static const close = "CLOSE";
+  static const copyAll = "COPY ALL";
 
   //Export screen
   static const export = "Export";
@@ -134,10 +140,15 @@ class AppConstants {
   static const removeThisBudget = "Remove this budget?";
   static const timeSelected = "Time selected:";
   static const set = "SET";
+  static const noBudgetApplied = "No budget applied in this month";
+  static const copyWarning =
+      "Copying will overwrite all previously applied budget-limits for this month.";
   static const noExpenseForThisCat = "No expense this month for category:";
   static const epenseInThisMonth = "Expense in this month:";
   static const removeBudgetMsg =
       "Budget over this category will be removed for this month, are you sure?";
+  static const noBudgetForOldMonthMsg =
+      "No budget was applied for this month. You can only see your old budget-limits to compare with current month.";
   static const noBudgetMsg =
       "Currently, no Budget is applied for this month.\nSet budget-limits for this month, or copy your budget-liimits from past months.";
 

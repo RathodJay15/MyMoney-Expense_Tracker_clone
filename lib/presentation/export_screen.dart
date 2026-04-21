@@ -98,113 +98,100 @@ class _ExportScreenState extends State<ExportScreen> {
       ),
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.onSurface,
-        body: isLoading
-            ? Container(
-                height: 300,
-                width: 300,
-                color: Theme.of(context).colorScheme.surface,
-                child: SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: CircularProgressIndicator(
-                    color: Theme.of(context).colorScheme.primary,
+        body: Container(
+          height: MediaQuery.heightOf(context),
+          color: Theme.of(context).colorScheme.onSurface,
+          child: Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: 170,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.elliptical(200, 30),
+                    bottomRight: Radius.elliptical(200, 30),
                   ),
                 ),
-              )
-            : Container(
-                height: MediaQuery.heightOf(context),
-                color: Theme.of(context).colorScheme.onSurface,
                 child: Stack(
                   children: [
-                    Container(
-                      width: double.infinity,
-                      height: 170,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.elliptical(200, 30),
-                          bottomRight: Radius.elliptical(200, 30),
-                        ),
-                      ),
-                      child: Stack(
-                        children: [
-                          SizedBox(
-                            height: 200,
-                            width: 200,
-                            child: Image.asset(
-                              "assets/images/png_bg_rings.png",
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 35,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        Get.back();
-                                      },
-                                      icon: Icon(
-                                        Iconsax.arrow_left_copy,
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.onSurface,
-                                      ),
-                                    ),
-                                    SizedBox(width: 20),
-                                    Expanded(
-                                      child: Text(
-                                        AppConstants.exportRecords,
-                                        style: TextStyle(
-                                          color: Theme.of(
-                                            context,
-                                          ).colorScheme.onSurface,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                    SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: Image.asset(
+                        "assets/images/png_bg_rings.png",
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
-                    Positioned(
-                      top: 90,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        child: Container(
-                          width: MediaQuery.widthOf(context) - 40,
-                          padding: EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.onSurface,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Theme.of(context).colorScheme.surface,
-                                blurRadius: 5,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 35,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                icon: Icon(
+                                  Iconsax.arrow_left_copy,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              Expanded(
+                                child: Text(
+                                  AppConstants.exportRecords,
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
-                          child: _bodySection(),
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ),
               ),
+              Positioned(
+                top: 90,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Container(
+                    width: MediaQuery.widthOf(context) - 40,
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(context).colorScheme.surface,
+                          blurRadius: 5,
+                        ),
+                      ],
+                    ),
+                    child: _bodySection(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -244,6 +231,7 @@ class _ExportScreenState extends State<ExportScreen> {
         ),
         SizedBox(height: 30),
         Container(
+          height: 300,
           padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
             border: BoxBorder.all(
@@ -351,20 +339,27 @@ class _ExportScreenState extends State<ExportScreen> {
         SizedBox(
           height: 50,
           child: OutlinedButton(
-            onPressed: _export,
+            onPressed: isLoading ? null : _export,
             style: OutlinedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.primary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: Text(
-              AppConstants.export,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontSize: 25,
-              ),
-            ),
+            child: isLoading
+                ? SizedBox(
+                    height: 30,
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  )
+                : Text(
+                    AppConstants.export,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: 25,
+                    ),
+                  ),
           ),
         ),
       ],

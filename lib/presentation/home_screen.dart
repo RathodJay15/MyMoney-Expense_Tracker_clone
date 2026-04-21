@@ -16,6 +16,7 @@ import 'package:mymoneyclone/presentation/budget_screen.dart';
 import 'package:mymoneyclone/presentation/export_screen.dart';
 import 'package:mymoneyclone/presentation/widgets/add_account.dart';
 import 'package:mymoneyclone/presentation/widgets/add_category.dart';
+import 'package:mymoneyclone/presentation/widgets/copy_budget.dart';
 import 'package:mymoneyclone/presentation/widgets/custom_appbar.dart';
 import 'package:mymoneyclone/presentation/widgets/empty_state.dart';
 import 'package:mymoneyclone/presentation/widgets/record_detail_dialog.dart';
@@ -34,6 +35,13 @@ class _HomeScreenState extends State<HomeScreen> {
     if (selected == 0) {
       Get.to(
         AddRecordScreen(title: AppConstants.addNewRecord, oldRecord: null),
+      );
+    } else if (selected == 1) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CopyBudget();
+        },
       );
     } else if (selected == 2) {
       showDialog(
@@ -188,32 +196,30 @@ class _HomeScreenState extends State<HomeScreen> {
             CategoryScreen(),
           ],
         ),
-        floatingActionButton: selected == 1
-            ? null
-            : Container(
-                height: 60,
-                width: 60,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color.fromARGB(47, 0, 0, 0),
-                      blurRadius: 5,
-                      spreadRadius: 3,
-                      offset: Offset(0, 5),
-                    ),
-                  ],
-                ),
-                child: IconButton(
-                  onPressed: _masterAdd,
-                  icon: Icon(
-                    Iconsax.add_circle_copy,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    size: 35,
-                  ),
-                ),
+        floatingActionButton: Container(
+          height: 60,
+          width: 60,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: const Color.fromARGB(47, 0, 0, 0),
+                blurRadius: 5,
+                spreadRadius: 3,
+                offset: Offset(0, 5),
               ),
+            ],
+          ),
+          child: IconButton(
+            onPressed: _masterAdd,
+            icon: Icon(
+              Iconsax.add_circle_copy,
+              color: Theme.of(context).colorScheme.onSurface,
+              size: 35,
+            ),
+          ),
+        ),
 
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
@@ -230,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           child: StylishBottomBar(
             backgroundColor: Theme.of(context).colorScheme.onSurface,
-            fabLocation: selected == 1 ? null : StylishBarFabLocation.center,
+            fabLocation: StylishBarFabLocation.center,
             hasNotch: true,
             notchStyle: NotchStyle.circle,
             currentIndex: selected,

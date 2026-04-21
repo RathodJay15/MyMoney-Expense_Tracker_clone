@@ -55,10 +55,6 @@ class MymoneyAlertdialog {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
                       ),
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        width: 2,
-                      ),
                     ),
                     child: Text(
                       actionN,
@@ -77,10 +73,6 @@ class MymoneyAlertdialog {
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
-                      ),
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                        width: 2,
                       ),
                     ),
                     child: Text(

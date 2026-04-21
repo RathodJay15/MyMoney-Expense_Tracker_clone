@@ -11,6 +11,7 @@ import 'package:mymoneyclone/data/models/accounts_model.dart';
 import 'package:mymoneyclone/data/models/budget_model.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
 import 'package:mymoneyclone/data/models/records_model.dart';
+import 'package:mymoneyclone/presentation/widgets/empty_state.dart';
 import 'package:mymoneyclone/presentation/widgets/record_detail_dialog.dart';
 import 'package:mymoneyclone/presentation/widgets/app_snackbar.dart';
 import 'package:mymoneyclone/presentation/widgets/mymoney_alertdialog.dart';
@@ -31,7 +32,10 @@ class BudgetScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [_headerSection(context), _budgetBody(context)],
+        children: [
+          _headerSection(context),
+          Expanded(child: _budgetBody(context)),
+        ],
       ),
     );
   }
@@ -179,8 +183,19 @@ class BudgetScreen extends StatelessWidget {
   }
 
   Widget _budgetBody(BuildContext context) {
-    return Expanded(
-      child: SingleChildScrollView(
+    return Obx(() {
+      DateTime headerMonth = budgetController.budgetMonth.value;
+      if (headerMonth.month < DateTime.now().month) {
+        return Center(
+          child: EmptystateScreen.emptyState(
+            icon: Iconsax.calculator_copy,
+            title: AppConstants.noBudgetForOldMonthMsg,
+            context: context,
+          ),
+        );
+      }
+
+      return SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,8 +237,8 @@ class BudgetScreen extends StatelessWidget {
             SizedBox(height: 20),
           ],
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget _budgetedList(BuildContext context) {
