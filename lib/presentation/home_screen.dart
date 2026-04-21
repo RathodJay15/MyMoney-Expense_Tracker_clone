@@ -8,10 +8,12 @@ import 'package:mymoneyclone/core/theme/icon_helper.dart';
 import 'package:mymoneyclone/data/models/accounts_model.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
 import 'package:mymoneyclone/data/models/records_model.dart';
+import 'package:mymoneyclone/data/services/hive_to_scv.dart';
 import 'package:mymoneyclone/presentation/account_screen.dart';
 import 'package:mymoneyclone/presentation/category_screen.dart';
 import 'package:mymoneyclone/presentation/add_record_screen.dart';
 import 'package:mymoneyclone/presentation/budget_screen.dart';
+import 'package:mymoneyclone/presentation/export_screen.dart';
 import 'package:mymoneyclone/presentation/widgets/add_account.dart';
 import 'package:mymoneyclone/presentation/widgets/add_category.dart';
 import 'package:mymoneyclone/presentation/widgets/custom_appbar.dart';
@@ -91,6 +93,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   Iconsax.document_download_copy,
                   color: Theme.of(context).colorScheme.onSurface,
                 ),
+                onTap: () {
+                  Get.back();
+                  Get.to(ExportScreen());
+                },
                 title: Text(
                   AppConstants.exportRecords,
                   style: TextStyle(

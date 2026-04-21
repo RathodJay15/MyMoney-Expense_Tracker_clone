@@ -86,6 +86,16 @@ class AppConstants {
   static const help = "Help";
   static const feedback = "Feedback";
 
+  //Export screen
+  static const export = "Export";
+  static const noRecordsToBeExported = "No records to be exported";
+  static const exportMsg =
+      '''• All records between a specified time range can be exported as a worksheet (Currently in.csv format).
+
+• To export records, set the start time and end time of the interval below and tap EXPORT NOW.
+
+• Note that, exported files(.csv) are not backup files and you cannot restore data from these files.''';
+
   //Record screen
   static const addNotes = "Add notes";
   static const updateRecord = "Update record";
@@ -122,7 +132,10 @@ class AppConstants {
   static const removeBudget = "Remove budget";
   static const noLimitAdded = "No limit added";
   static const removeThisBudget = "Remove this budget?";
+  static const timeSelected = "Time selected:";
   static const set = "SET";
+  static const noExpenseForThisCat = "No expense this month for category:";
+  static const epenseInThisMonth = "Expense in this month:";
   static const removeBudgetMsg =
       "Budget over this category will be removed for this month, are you sure?";
   static const noBudgetMsg =

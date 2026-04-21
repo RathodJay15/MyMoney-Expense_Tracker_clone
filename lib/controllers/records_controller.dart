@@ -414,6 +414,45 @@ class RecordsController extends GetxController {
     return {AppConstants.oldToNew: ascMap, AppConstants.newToOld: descMap};
   }
 
+  Map<String, List<RecordModel>> fetchRecordsByCatMonth(
+    int categoryId,
+    DateTime selectedMonth, {
+    bool isAsc = true,
+  }) {
+    // Filter records by category + month
+    final filtered = _allRecords.where((r) {
+      return r.categoryId == categoryId &&
+          r.date.month == selectedMonth.month &&
+          r.date.year == selectedMonth.year;
+    }).toList();
+
+    // Step 2: Sort full list first
+    filtered.sort(
+      (a, b) => isAsc ? a.date.compareTo(b.date) : b.date.compareTo(a.date),
+    );
+
+    // Step 3: Group by date (day-wise)
+    Map<String, List<RecordModel>> grouped = {};
+
+    for (var record in filtered) {
+      final key = DateFormat('dd MMM yyyy').format(record.date);
+
+      if (!grouped.containsKey(key)) {
+        grouped[key] = [];
+      }
+
+      grouped[key]!.add(record);
+    }
+
+    return grouped;
+  }
+
+  List<RecordModel> getRecordsForDuration(DateTime from, DateTime to) {
+    return filtredRecords.where((e) {
+      return e.date.isAfter(from) && e.date.isBefore(to);
+    }).toList();
+  }
+
   //===========================================
   CategoryModel? getCatById(int id) {
     return _categoriesHiveService.getCatById(id);

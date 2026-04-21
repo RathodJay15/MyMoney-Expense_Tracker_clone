@@ -19,6 +19,12 @@ class MyMoneyTheme {
       backgroundColor: Colors.white, // dialog bg
       rangePickerHeaderForegroundColor: Colors.black,
 
+      headerHelpStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+
       headerBackgroundColor: Color.fromARGB(255, 66, 150, 144), // primary
       headerForegroundColor: Colors.white,
 
@@ -61,6 +67,8 @@ class MyMoneyTheme {
         return Colors.transparent;
       }),
 
+      yearOverlayColor: WidgetStateProperty.all(Colors.blue),
+
       dividerColor: Colors.grey,
 
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -77,7 +85,7 @@ class MyMoneyTheme {
 
       dialBackgroundColor: Color.fromARGB(255, 224, 228, 228),
       dialHandColor: Color.fromARGB(255, 66, 150, 144),
-      dialTextColor: Colors.white,
+      dialTextColor: Colors.black,
 
       entryModeIconColor: Colors.black,
 
@@ -86,6 +94,11 @@ class MyMoneyTheme {
       ),
       cancelButtonStyle: TextButton.styleFrom(
         foregroundColor: Color.fromARGB(255, 66, 150, 144),
+      ),
+      helpTextStyle: TextStyle(
+        color: Color.fromARGB(255, 42, 124, 118),
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
       ),
 
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

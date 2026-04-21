@@ -35,7 +35,7 @@ class AppSnackbar {
                     color: Theme.of(context).colorScheme.primary,
                     size: 25,
                   ),
-                  SizedBox(width: 5),
+                  SizedBox(width: 10),
                   SizedBox(
                     width: MediaQuery.widthOf(context) * 0.70,
                     child: Text(

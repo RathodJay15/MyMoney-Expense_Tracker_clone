@@ -5,13 +5,18 @@ import 'package:mymoneyclone/controllers/budget_controller.dart';
 import 'package:mymoneyclone/controllers/categories_controller.dart';
 import 'package:mymoneyclone/controllers/records_controller.dart';
 import 'package:mymoneyclone/core/constants/app_constants.dart';
+import 'package:mymoneyclone/core/constants/app_helper.dart';
 import 'package:mymoneyclone/core/theme/icon_helper.dart';
+import 'package:mymoneyclone/data/models/accounts_model.dart';
 import 'package:mymoneyclone/data/models/budget_model.dart';
 import 'package:mymoneyclone/data/models/category_model.dart';
+import 'package:mymoneyclone/data/models/records_model.dart';
+import 'package:mymoneyclone/presentation/widgets/record_detail_dialog.dart';
 import 'package:mymoneyclone/presentation/widgets/app_snackbar.dart';
 import 'package:mymoneyclone/presentation/widgets/mymoney_alertdialog.dart';
 import 'package:mymoneyclone/presentation/widgets/custom_appbar.dart';
 import 'package:percent_indicator/multi_segment_linear_indicator.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class BudgetScreen extends StatelessWidget {
   CategoryController categoryController = Get.find();
@@ -176,14 +181,14 @@ class BudgetScreen extends StatelessWidget {
   Widget _budgetBody(BuildContext context) {
     return Expanded(
       child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Obx(() {
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Obx(() {
                 return Text(
                   "${AppConstants.budgetedCats} ${budgetController.getFormattedHeaderDate()}",
                   style: TextStyle(
@@ -193,9 +198,15 @@ class BudgetScreen extends StatelessWidget {
                   ),
                 );
               }),
-              _budgetedList(context),
-              SizedBox(height: 20),
-              Text(
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: _budgetedList(context),
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
                 AppConstants.notBudgeted,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primaryContainer,
@@ -203,10 +214,13 @@ class BudgetScreen extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              _notBudgetedList(),
-              SizedBox(height: 20),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: _notBudgetedList(),
+            ),
+            SizedBox(height: 20),
+          ],
         ),
       ),
     );
@@ -257,10 +271,26 @@ class BudgetScreen extends StatelessWidget {
           return Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                if (spent == 0.0) {
+                  AppSnackbar.showSnackBar(
+                    context,
+                    Iconsax.category_2_copy,
+                    "${AppConstants.noExpenseForThisCat} ${category.name}",
+                  );
+                  return;
+                }
+
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  useSafeArea: true,
+                  builder: (context) => displayCat(category, context, budget),
+                );
+              },
               borderRadius: BorderRadius.circular(15),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -537,6 +567,383 @@ class BudgetScreen extends StatelessWidget {
         },
       );
     });
+  }
+
+  Widget displayCat(
+    CategoryModel category,
+    BuildContext context,
+    BudgetModel budget,
+  ) {
+    return Obx(() {
+      final ascRecords = recordsController.fetchRecordsByCatMonth(
+        category.key,
+        budgetController.budgetMonth.value,
+        isAsc: true,
+      );
+      final descRecords = recordsController.fetchRecordsByCatMonth(
+        category.key,
+        budgetController.budgetMonth.value,
+        isAsc: false,
+      );
+      double totalExpense = 0;
+
+      ascRecords.forEach((key, recordsList) {
+        for (var record in recordsList) {
+          if (record.type == AppConstants.expense) {
+            totalExpense += record.amount;
+          }
+        }
+      });
+
+      double expensePercantage = (totalExpense * 100) / budget.expenceLimit;
+
+      final orderedRecords =
+          categoryController.recordOrder.value == AppConstants.oldToNew
+          ? ascRecords
+          : descRecords;
+      final groupedRecordsKyes = orderedRecords.keys.toList();
+      return Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.onSurface,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              color: Theme.of(context).colorScheme.primary,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      icon: Icon(
+                        Iconsax.close_circle_copy,
+                        size: 40,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppConstants.catDetails,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          "${AppConstants.timeSelected} ${budgetController.getFormattedHeaderDate()}",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSecondary,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      IconHelper.getIconsaxIcon(category.icon),
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      size: 30,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          category.name,
+                          style: TextStyle(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          category.type == AppConstants.expense
+                              ? AppConstants.expenseCategory
+                              : AppConstants.incomeCategory,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.surface,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Container(
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onSecondary,
+                  border: BoxBorder.all(
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: CircularPercentIndicator(
+                        radius: 60.0,
+                        lineWidth: 6.0,
+                        animation: true,
+                        percent: expensePercantage / 100,
+                        center: Text(
+                          "${expensePercantage.toStringAsFixed(2)} %",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20.0,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        circularStrokeCap: CircularStrokeCap.round,
+                        progressColor: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 150,
+                      child: Text(
+                        "${AppConstants.epenseInThisMonth} ${AppConstants.amount(totalExpense)}",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    AppConstants.totalRecordsInCategory(orderedRecords.length),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  if (orderedRecords.length >= 2)
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: categoryController.changeRecordOrder,
+                        borderRadius: BorderRadius.circular(8),
+                        splashColor: Theme.of(
+                          context,
+                        ).colorScheme.primary.withAlpha(50),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Iconsax.sort_copy,
+                                color: Theme.of(context).colorScheme.surface,
+                                size: 25,
+                              ),
+                              Text(
+                                categoryController.recordOrder.value,
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.surface,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: groupedRecordsKyes.length,
+                itemBuilder: (context, index) {
+                  String groupKey = groupedRecordsKyes[index];
+                  List<RecordModel> records = orderedRecords[groupKey]!;
+
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              groupKey,
+                              style: TextStyle(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.primaryContainer,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          _recordList(records, category),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget _recordList(List<RecordModel> records, CategoryModel category) {
+    return ListView.builder(
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: records.length,
+      itemBuilder: (context, index) {
+        final record = records[index];
+        AccountModel? account = recordsController.getAccById(record.accountId);
+
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return RecordDetailDialog(record: record);
+                },
+              );
+            },
+            splashColor: Theme.of(context).colorScheme.primary.withAlpha(50),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      IconHelper.getIconsaxIcon(account!.icon),
+                      size: 30,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          account.name,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppHelper.getFormattedDateString2(record.date),
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).colorScheme.surface,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+
+                            Text(
+                              record.time,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).colorScheme.surface,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    AppConstants.amount(record.amount),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                      fontSize: 18,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 

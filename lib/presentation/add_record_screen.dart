@@ -627,10 +627,10 @@ class AddRecordScreenState extends State<AddRecordScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Theme.of(context).colorScheme.onSurface,
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.surface,
-                  width: 2,
-                ),
+                // border: Border.all(
+                //   color: Theme.of(context).colorScheme.surface,
+                //   width: 2,
+                // ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -805,18 +805,9 @@ class AddRecordScreenState extends State<AddRecordScreen> {
           });
         },
         style: OutlinedButton.styleFrom(
-          foregroundColor: isSign
-              ? Theme.of(context).colorScheme.onSurface
-              : Theme.of(context).colorScheme.primary,
           backgroundColor: Theme.of(context).colorScheme.onSurface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
-          ),
-          side: BorderSide(
-            color: isSign
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.surface,
-            width: 2,
           ),
         ),
         child: Text(
@@ -824,7 +815,7 @@ class AddRecordScreenState extends State<AddRecordScreen> {
           style: TextStyle(
             color: isSign
                 ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.surface,
+                : Theme.of(context).colorScheme.primaryContainer,
             fontSize: 30,
           ),
         ),

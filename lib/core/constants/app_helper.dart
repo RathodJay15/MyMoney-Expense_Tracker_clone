@@ -27,4 +27,9 @@ class AppHelper {
 
     return TimeOfDay.fromDateTime(dateTime);
   }
+
+  static String getFullDateTime(DateTime date, String time) {
+    DateFormat formatter = DateFormat('MMM dd, yyyy $time');
+    return formatter.format(date);
+  }
 }
